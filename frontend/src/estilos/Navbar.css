@@ -1,0 +1,129 @@
+.navbar {
+    background: linear-gradient(to right, #ffffff, #f8fafc);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 1000;
+}
+
+.navbar-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 1rem;
+}
+
+.navbar-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    height: 4rem;
+}
+
+.navbar-brand {
+    display: flex;
+    align-items: center;
+}
+
+.navbar-logo {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: #4f46e5;
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+
+.navbar-logo:hover {
+    color: #4338ca;
+}
+
+.navbar-links {
+    display: flex;
+    gap: 2rem;
+    align-items: center;
+}
+
+.navbar-link {
+    color: #4b5563;
+    text-decoration: none;
+    font-size: 0.875rem;
+    font-weight: 500;
+    padding: 0.5rem 0;
+    border-bottom: 2px solid transparent;
+    transition: all 0.3s ease;
+}
+
+.navbar-link:hover {
+    color: #1f2937;
+    border-bottom-color: #4f46e5;
+}
+
+.navbar-actions {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.navbar-user {
+    color: #4b5563;
+    font-size: 0.875rem;
+    font-weight: 500;
+}
+
+.navbar-button {
+    padding: 0.5rem 1rem;
+    border-radius: 0.5rem;
+    font-size: 0.875rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.navbar-button.login {
+    color: #4b5563;
+    background: transparent;
+    border: 1px solid #e5e7eb;
+}
+
+.navbar-button.login:hover {
+    background: #f3f4f6;
+    color: #1f2937;
+}
+
+.navbar-button.register {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    border: none;
+}
+
+.navbar-button.register:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(102, 126, 234, 0.2);
+}
+
+.navbar-button.logout {
+    color: #ef4444;
+    background: transparent;
+    border: 1px solid #fecaca;
+}
+
+.navbar-button.logout:hover {
+    background: #fee2e2;
+    color: #dc2626;
+}
+
+@media (max-width: 768px) {
+    .navbar-links {
+        display: none;
+    }
+
+    .navbar-actions {
+        gap: 0.5rem;
+    }
+
+    .navbar-button {
+        padding: 0.375rem 0.75rem;
+        font-size: 0.75rem;
+    }
+} 

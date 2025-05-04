@@ -1,0 +1,128 @@
+.calendar-view {
+    background-color: white;
+    border-radius: 0.5rem;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    padding: 1.5rem;
+}
+
+.calendar-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.5rem;
+}
+
+.calendar-title {
+    font-size: 1.25rem;
+    font-weight: 500;
+    color: #1a1a1a;
+}
+
+.calendar-nav {
+    display: flex;
+    gap: 0.5rem;
+}
+
+.calendar-grid {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 0.5rem;
+}
+
+.calendar-weekday {
+    text-align: center;
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: #6b7280;
+    padding: 0.5rem;
+}
+
+.calendar-day {
+    aspect-ratio: 1;
+    padding: 0.5rem;
+    border: 1px solid #e5e7eb;
+    border-radius: 0.375rem;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.calendar-day:hover {
+    background-color: #f9fafb;
+}
+
+.calendar-day.today {
+    background-color: #4f46e5;
+    color: white;
+    border-color: #4f46e5;
+}
+
+.calendar-day.other-month {
+    color: #9ca3af;
+}
+
+.calendar-day.has-tasks {
+    border-color: #4f46e5;
+}
+
+.day-number {
+    font-size: 0.875rem;
+    font-weight: 500;
+    margin-bottom: 0.25rem;
+}
+
+.day-tasks {
+    font-size: 0.75rem;
+    color: #6b7280;
+}
+
+.day-tasks.today {
+    color: white;
+}
+
+.calendar-event {
+    font-size: 0.75rem;
+    padding: 0.25rem 0.5rem;
+    border-radius: 0.25rem;
+    margin-bottom: 0.25rem;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.calendar-event.personal {
+    background-color: #e0e7ff;
+    color: #4f46e5;
+}
+
+.calendar-event.shared {
+    background-color: #fef3c7;
+    color: #d97706;
+}
+
+.calendar-event.today {
+    background-color: white;
+    color: #4f46e5;
+}
+
+@media (max-width: 768px) {
+    .calendar-view {
+        padding: 1rem;
+    }
+
+    .calendar-weekday {
+        font-size: 0.75rem;
+    }
+
+    .day-number {
+        font-size: 0.75rem;
+    }
+
+    .day-tasks {
+        font-size: 0.625rem;
+    }
+
+    .calendar-event {
+        font-size: 0.625rem;
+        padding: 0.125rem 0.25rem;
+    }
+} 
