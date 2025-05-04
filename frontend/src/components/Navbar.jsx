@@ -1,5 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import { useAuth } from '../context/AuthContext';
 
 const navbarStyle = {
   background: '#f5f5f5',
@@ -41,20 +42,37 @@ const linkStyle = {
   padding: '0.5rem 0',
 };
 
-const Navbar = () => (
-  <nav style={navbarStyle}>
-    <div style={containerStyle}>
-      <Link to="/" style={logoStyle}>
-        Gestor de Tareas
-      </Link>
-      <div style={linksStyle}>
-        <Link to="/dashboard" style={linkStyle}>Dashboard</Link>
-        <Link to="/tasks" style={linkStyle}>Mis Tareas</Link>
-        <Link to="/login" style={linkStyle}>Iniciar Sesión</Link>
-        <Link to="/signup" style={linkStyle}>Registrarse</Link>
+const Navbar = () => {
+  const { user, isAuthenticated, logout } = useAuth();
+
+  return (
+    <nav style={navbarStyle}>
+      <div style={containerStyle}>
+        <Link to="/" style={logoStyle}>
+          Gestor de Tareas
+        </Link>
+        <div style={linksStyle}>
+          {isAuthenticated ? (
+            <>
+              <Link to="/dashboard" style={linkStyle}>Dashboard</Link>
+              <Link to="/tasks" style={linkStyle}>Mis Tareas</Link>
+              {user?.role === 'admin' && (
+                <Link to="/admin" style={linkStyle}>Panel de Admin</Link>
+              )}
+              <button onClick={logout} style={{ ...linkStyle, background: 'none', border: 'none', cursor: 'pointer', color: '#ef4444' }}>
+                Cerrar Sesión
+              </button>
+            </>
+          ) : (
+            <>
+              <Link to="/login" style={linkStyle}>Iniciar Sesión</Link>
+              <Link to="/signup" style={linkStyle}>Registrarse</Link>
+            </>
+          )}
+        </div>
       </div>
-    </div>
-  </nav>
-);
+    </nav>
+  );
+};
 
 export default Navbar; 
