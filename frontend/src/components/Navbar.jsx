@@ -1,65 +1,20 @@
 import React from 'react';
-import { Link, useNavigate } from 'react-router-dom';
-import { useAuth } from '../context/AuthContext';
-import '../estilos/Navbar.css';
+import { Link } from 'react-router-dom';
 
 const Navbar = () => {
-  const { user, isAuthenticated, logout } = useAuth();
-  const navigate = useNavigate();
-
-  const handleLogout = () => {
-    logout();
-    navigate('/login');
-  };
-
   return (
-    <nav className="navbar">
-      <div className="navbar-container">
-        <div className="navbar-content">
-          <div className="navbar-brand">
-            <Link to="/" className="navbar-logo">
-              Gestor de Tareas
-            </Link>
-          </div>
-          
-          {isAuthenticated && (
-            <div className="navbar-links">
-              <Link to="/tasks" className="navbar-link">
-                Mis Tareas
-              </Link>
-              {user?.role === 'admin' && (
-                <Link to="/admin" className="navbar-link">
-                  Panel de Admin
-                </Link>
-              )}
-            </div>
-          )}
-
-          <div className="navbar-actions">
-            {isAuthenticated ? (
-              <button
-                onClick={handleLogout}
-                className="navbar-button logout"
-              >
-                Cerrar Sesión
-              </button>
-            ) : (
-              <>
-                <Link
-                  to="/login"
-                  className="navbar-button login"
-                >
-                  Iniciar Sesión
-                </Link>
-                <Link
-                  to="/signup"
-                  className="navbar-button register"
-                >
-                  Registrarse
-                </Link>
-              </>
-            )}
-          </div>
+    <nav style={{ background: '#f5f5f5', padding: '1rem', borderBottom: '1px solid #e5e7eb' }}>
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', maxWidth: '1200px', margin: '0 auto' }}>
+        <div>
+          <Link to="/" style={{ fontWeight: 'bold', fontSize: '1.2rem', color: '#4f46e5', textDecoration: 'none' }}>
+            Gestor de Tareas
+          </Link>
+        </div>
+        <div style={{ display: 'flex', gap: '1rem' }}>
+          <Link to="/dashboard" style={{ color: '#4b5563', textDecoration: 'none' }}>Dashboard</Link>
+          <Link to="/tasks" style={{ color: '#4b5563', textDecoration: 'none' }}>Mis Tareas</Link>
+          <Link to="/login" style={{ color: '#4b5563', textDecoration: 'none' }}>Iniciar Sesión</Link>
+          <Link to="/signup" style={{ color: '#4b5563', textDecoration: 'none' }}>Registrarse</Link>
         </div>
       </div>
     </nav>
