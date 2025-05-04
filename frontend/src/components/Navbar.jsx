@@ -54,7 +54,6 @@ const Navbar = () => {
         <div style={linksStyle}>
           {isAuthenticated ? (
             <>
-              <Link to="/dashboard" style={linkStyle}>Dashboard</Link>
               <Link to="/tasks" style={linkStyle}>Mis Tareas</Link>
               {user?.role === 'admin' && (
                 <Link to="/admin" style={linkStyle}>Panel de Admin</Link>
