@@ -11,7 +11,8 @@ import '../estilos/CalendarView.css';
 function CalendarView() {
   const [currentDate, setCurrentDate] = useState(new Date());
   const [selectedDate, setSelectedDate] = useState(null);
-  const { tasks, fetchTasks, loading, error } = useTasks();
+  const [showSharedTasks, setShowSharedTasks] = useState(false);
+  const { tasks, sharedTasks, fetchTasks, loading, error } = useTasks();
 
   useEffect(() => {
     fetchTasks();
@@ -27,6 +28,9 @@ function CalendarView() {
       console.error('Error al actualizar la tarea:', error);
     }
   };
+
+  // Usar la lista seleccionada
+  const calendarTasks = showSharedTasks ? sharedTasks.map(st => st.Task) : tasks;
 
   const getDaysInMonth = (date) => {
     return new Date(date.getFullYear(), date.getMonth() + 1, 0).getDate();
@@ -86,8 +90,8 @@ function CalendarView() {
            date.getFullYear() === today.getFullYear();
   };
 
-  const hasTasks = (date) => {
-    return tasks.some(task => {
+  const getTasksForDate = (date) => {
+    return calendarTasks.filter(task => {
       const taskDate = new Date(task.dueDate);
       return taskDate.getDate() === date.getDate() &&
              taskDate.getMonth() === date.getMonth() &&
@@ -95,14 +99,7 @@ function CalendarView() {
     });
   };
 
-  const getTasksForDate = (date) => {
-    return tasks.filter(task => {
-      const taskDate = new Date(task.dueDate);
-      return taskDate.getDate() === date.getDate() &&
-             taskDate.getMonth() === date.getMonth() &&
-             taskDate.getFullYear() === date.getFullYear();
-    });
-  };
+  const hasTasks = (date) => getTasksForDate(date).length > 0;
 
   const renderCalendarDays = () => {
     const prevDays = getPreviousMonthDays(currentDate);
@@ -128,7 +125,9 @@ function CalendarView() {
         >
           {date.getDate()}
           {tasksForDay.length > 0 && (
-            <span className="day-tasks">{tasksForDay.length} 📌</span>
+            <span className="day-tasks">
+              {tasksForDay.length} {showSharedTasks ? '🤝' : '📌'}
+            </span>
           )}
         </div>
       );
@@ -161,8 +160,14 @@ function CalendarView() {
           <button onClick={handlePrevMonth}>Anterior</button>
           <button onClick={handleNextMonth}>Siguiente</button>
         </div>
+        <button
+          className="btn-secondary"
+          style={{ marginLeft: '1rem' }}
+          onClick={() => setShowSharedTasks((prev) => !prev)}
+        >
+          {showSharedTasks ? 'Ver Mis Tareas' : 'Ver Tareas Compartidas'}
+        </button>
       </div>
-
       <div className="calendar-grid">
         {['Dom', 'Lun', 'Mar', 'Mié', 'Jue', 'Vie', 'Sáb'].map(day => (
           <div key={day} className="calendar-day-header">
@@ -171,7 +176,6 @@ function CalendarView() {
         ))}
         {renderCalendarDays()}
       </div>
-
       {selectedDate && (
         <div className="task-list">
           <h3>Tareas para {selectedDate.toLocaleDateString('es')}</h3>
