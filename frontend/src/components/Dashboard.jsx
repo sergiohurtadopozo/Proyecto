@@ -102,15 +102,7 @@ function Dashboard() {
 
       {showTaskForm && (
         <div className="task-form-overlay">
-          <div className="task-form-container">
-            <button 
-              className="close-button"
-              onClick={() => setShowTaskForm(false)}
-            >
-              ✕
-            </button>
-            <TaskForm onTaskAdded={handleTaskAdded} />
-          </div>
+          <TaskForm onSubmit={handleTaskAdded} onClose={() => setShowTaskForm(false)} />
         </div>
       )}
 
