@@ -89,11 +89,12 @@ const TaskForm = ({ task, onSubmit: onSubmitProp, onClose }) => {
 
   return (
     <div className="task-form-container">
-      <h2>{task ? 'Editar Tarea' : 'Nueva Tarea'}</h2>
-      
-      {error && <div className="error-message">{error}</div>}
-
+      <div className="task-form-close">
+        <button className="close-btn" onClick={onClose} type="button">✕</button>
+      </div>
       <form onSubmit={handleSubmit} className="task-form">
+        <h2>{task ? 'Editar Tarea' : 'Nueva Tarea'}</h2>
+        {error && <div className="error-message">{error}</div>}
         <div className="form-group">
           <label htmlFor="title">Título:</label>
           <input
@@ -106,7 +107,6 @@ const TaskForm = ({ task, onSubmit: onSubmitProp, onClose }) => {
             className={error ? 'error' : ''}
           />
         </div>
-
         <div className="form-group">
           <label htmlFor="description">Descripción:</label>
           <textarea
@@ -118,7 +118,6 @@ const TaskForm = ({ task, onSubmit: onSubmitProp, onClose }) => {
             className={error ? 'error' : ''}
           />
         </div>
-
         <div className="form-group">
           <label htmlFor="priority">Prioridad:</label>
           <select
@@ -133,7 +132,6 @@ const TaskForm = ({ task, onSubmit: onSubmitProp, onClose }) => {
             <option value="high">Alta</option>
           </select>
         </div>
-
         <div className="form-group">
           <label htmlFor="status">Estado:</label>
           <select
@@ -148,7 +146,6 @@ const TaskForm = ({ task, onSubmit: onSubmitProp, onClose }) => {
             <option value="completed">Completada</option>
           </select>
         </div>
-
         <div className="form-group">
           <label htmlFor="dueDate">Fecha límite:</label>
           <input
@@ -161,7 +158,6 @@ const TaskForm = ({ task, onSubmit: onSubmitProp, onClose }) => {
             className={error ? 'error' : ''}
           />
         </div>
-
         <div className="form-actions">
           <button type="submit" disabled={loading}>
             {loading ? 'Procesando...' : (task ? 'Actualizar' : 'Crear')}

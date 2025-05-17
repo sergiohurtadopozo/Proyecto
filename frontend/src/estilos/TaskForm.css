@@ -11,13 +11,36 @@
 
 .task-form {
     background-color: white;
-    padding: 2.5rem 2rem;
+    padding: 1.5rem 1rem;
     border-radius: 1rem;
     box-shadow: 0 4px 24px rgba(0, 0, 0, 0.08);
     width: 100%;
-    max-width: 420px;
+    max-width: 340px;
     margin: 0 auto;
     transition: box-shadow 0.2s;
+    position: relative;
+}
+
+.task-form-close {
+    width: 100%;
+    display: flex;
+    justify-content: flex-end;
+    margin-bottom: -2.5rem;
+    z-index: 2;
+}
+
+.close-btn {
+    background: none;
+    border: none;
+    font-size: 1.5rem;
+    color: #888;
+    cursor: pointer;
+    transition: color 0.2s;
+    margin-right: 0.2rem;
+}
+
+.close-btn:hover {
+    color: #4f46e5;
 }
 
 .task-form h2 {
@@ -102,7 +125,7 @@ button[type="submit"]:hover, .btn-submit:hover {
 
 @media (max-width: 900px) {
     .task-form {
-        padding: 2rem 1rem;
+        padding: 1.2rem 0.5rem;
         max-width: 95vw;
     }
 }
@@ -113,8 +136,8 @@ button[type="submit"]:hover, .btn-submit:hover {
         min-height: 100vh;
     }
     .task-form {
-        padding: 1rem 0.5rem;
-        max-width: 100vw;
+        padding: 0.7rem 0.2rem;
+        max-width: 98vw;
         border-radius: 0.5rem;
         box-shadow: 0 2px 8px rgba(79, 70, 229, 0.08);
     }
