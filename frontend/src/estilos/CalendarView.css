@@ -61,7 +61,18 @@
 }
 
 .calendar-day.has-tasks {
-    border-color: #4f46e5;
+    background-color: #e0e7ff !important;
+    border: 2px solid #4f46e5 !important;
+    color: #1a1a1a !important;
+    font-weight: bold;
+    position: relative;
+    box-shadow: 0 2px 8px rgba(79, 70, 229, 0.10);
+    transition: background 0.2s, border 0.2s;
+}
+
+.calendar-day.has-tasks:hover {
+    background-color: #c7d2fe !important;
+    border-color: #4338ca !important;
 }
 
 .day-number {
@@ -71,12 +82,17 @@
 }
 
 .day-tasks {
-    font-size: 0.75rem;
-    color: #6b7280;
+    display: block;
+    margin-top: 0.2rem;
+    font-size: 0.85rem;
+    color: #4f46e5;
+    font-weight: 600;
 }
 
-.day-tasks.today {
-    color: white;
+.calendar-day.today.has-tasks {
+    background-color: #4f46e5 !important;
+    color: #fff !important;
+    border-color: #4f46e5 !important;
 }
 
 .calendar-event {

@@ -118,6 +118,7 @@ function CalendarView() {
         hasTasks(date) ? 'has-tasks' : '',
         !isCurrentMonth ? 'other-month' : ''
       ].filter(Boolean).join(' ');
+      const tasksForDay = getTasksForDate(date);
 
       return (
         <div
@@ -126,7 +127,9 @@ function CalendarView() {
           onClick={() => handleDateClick(date)}
         >
           {date.getDate()}
-          {hasTasks(date) && <span className="task-indicator" />}
+          {tasksForDay.length > 0 && (
+            <span className="day-tasks">{tasksForDay.length} 📌</span>
+          )}
         </div>
       );
     });
