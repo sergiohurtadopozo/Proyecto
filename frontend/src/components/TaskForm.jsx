@@ -168,10 +168,12 @@ const TaskForm = ({ task, onSubmit: onSubmitProp, onClose }) => {
             required
             className={error === 'fecha' ? 'error' : ''}
           />
+          <div style={{ minHeight: '22px' }}>
+            {error === 'fecha' && (
+              <div className="error-message">No puedes crear una tarea con fecha anterior a hoy.</div>
+            )}
+          </div>
         </div>
-        {error === 'fecha' && (
-          <div className="error-message">No puedes crear una tarea con fecha anterior a hoy.</div>
-        )}
         <div className="form-actions">
           <button type="submit" disabled={loading}>
             {loading ? 'Procesando...' : (task ? 'Actualizar' : 'Crear')}
