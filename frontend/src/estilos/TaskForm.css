@@ -4,8 +4,8 @@
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    min-height: 100vh;
-    padding: 2rem 0;
+    min-height: 60vh;
+    padding: 0.7rem 0;
     background: rgba(0,0,0,0.03);
 }
 
@@ -132,8 +132,8 @@ button[type="submit"]:hover, .btn-submit:hover {
 
 @media (max-width: 600px) {
     .task-form-container {
-        padding: 0.3rem 0.05rem;
-        min-height: 100vh;
+        padding: 0.1rem 0.02rem;
+        min-height: 40vh;
     }
     .task-form {
         padding: 0.5rem 0.1rem;
