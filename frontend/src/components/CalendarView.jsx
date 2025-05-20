@@ -11,7 +11,6 @@ import '../estilos/CalendarView.css';
 function CalendarView({ tasks: propTasks }) {
   const [currentDate, setCurrentDate] = useState(new Date());
   const [selectedDate, setSelectedDate] = useState(null);
-  const [showSharedTasks, setShowSharedTasks] = useState(false);
   const { tasks, sharedTasks, fetchTasks, loading, error } = useTasks();
 
   useEffect(() => {
@@ -29,8 +28,8 @@ function CalendarView({ tasks: propTasks }) {
     }
   };
 
-  // Usar las tareas pasadas por props si existen (modo admin), si no, usar las del contexto
-  const calendarTasks = propTasks ? propTasks : (showSharedTasks ? sharedTasks.map(st => st.Task) : tasks);
+  // Si se pasan tasks por props (modo admin), solo mostrar esas tareas
+  const calendarTasks = propTasks ? propTasks : tasks;
 
   const getDaysInMonth = (date) => {
     return new Date(date.getFullYear(), date.getMonth() + 1, 0).getDate();
@@ -126,7 +125,7 @@ function CalendarView({ tasks: propTasks }) {
           {date.getDate()}
           {tasksForDay.length > 0 && (
             <span className="day-tasks">
-              {tasksForDay.length} {showSharedTasks ? '🤝' : '📌'}
+              {tasksForDay.length}
             </span>
           )}
         </div>
@@ -160,13 +159,6 @@ function CalendarView({ tasks: propTasks }) {
           <button onClick={handlePrevMonth}>Anterior</button>
           <button onClick={handleNextMonth}>Siguiente</button>
         </div>
-        <button
-          className="btn-secondary"
-          style={{ marginLeft: '1rem' }}
-          onClick={() => setShowSharedTasks((prev) => !prev)}
-        >
-          {showSharedTasks ? 'Ver Mis Tareas' : 'Ver Tareas Compartidas'}
-        </button>
       </div>
       <div className="calendar-grid">
         {['Dom', 'Lun', 'Mar', 'Mié', 'Jue', 'Vie', 'Sáb'].map(day => (
