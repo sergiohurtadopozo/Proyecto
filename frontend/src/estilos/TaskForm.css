@@ -11,11 +11,11 @@
 
 .task-form {
     background-color: white;
-    padding: 1.5rem 1rem;
-    border-radius: 1rem;
+    padding: 1rem 0.7rem;
+    border-radius: 0.8rem;
     box-shadow: 0 4px 24px rgba(0, 0, 0, 0.08);
     width: 100%;
-    max-width: 340px;
+    max-width: 260px;
     margin: 0 auto;
     transition: box-shadow 0.2s;
     position: relative;
@@ -125,20 +125,20 @@ button[type="submit"]:hover, .btn-submit:hover {
 
 @media (max-width: 900px) {
     .task-form {
-        padding: 1.2rem 0.5rem;
-        max-width: 95vw;
+        padding: 0.7rem 0.3rem;
+        max-width: 90vw;
     }
 }
 
 @media (max-width: 600px) {
     .task-form-container {
-        padding: 0.5rem 0.1rem;
+        padding: 0.3rem 0.05rem;
         min-height: 100vh;
     }
     .task-form {
-        padding: 0.7rem 0.2rem;
-        max-width: 98vw;
-        border-radius: 0.5rem;
+        padding: 0.5rem 0.1rem;
+        max-width: 96vw;
+        border-radius: 0.4rem;
         box-shadow: 0 2px 8px rgba(79, 70, 229, 0.08);
     }
     .form-actions {
