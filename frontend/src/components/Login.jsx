@@ -1,6 +1,6 @@
 // src/components/Login.jsx
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import '../estilos/Login.css';
 
@@ -13,6 +13,7 @@ function Login({ onAuthSuccess }) {
   const [message, setMessage] = useState('');
   const [loading, setLoading] = useState(false);
   const { login } = useAuth();
+  const navigate = useNavigate();
 
   const validateForm = () => {
     const newErrors = {};
@@ -61,6 +62,7 @@ function Login({ onAuthSuccess }) {
       });
       setMessage('Inicio de sesión exitoso.');
       onAuthSuccess && onAuthSuccess(user);
+      navigate('/tasks');
     } catch (error) {
       console.error("Error en login:", error);
       setMessage(error.message || 'Error al iniciar sesión. Por favor, intenta nuevamente.');
