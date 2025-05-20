@@ -54,7 +54,7 @@ const TaskForm = ({ task, onSubmit: onSubmitProp, onClose }) => {
       const dueDate = new Date(formData.dueDate);
       dueDate.setHours(0, 0, 0, 0);
       if (dueDate < today) {
-      
+        setError('fecha');
         setLoading(false);
         return;
       }
