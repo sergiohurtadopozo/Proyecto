@@ -48,6 +48,17 @@ const TaskForm = ({ task, onSubmit: onSubmitProp, onClose }) => {
         throw new Error('Debe iniciar sesión para crear tareas');
       }
 
+      // Validar que la fecha no sea anterior a hoy
+      const today = new Date();
+      today.setHours(0, 0, 0, 0);
+      const dueDate = new Date(formData.dueDate);
+      dueDate.setHours(0, 0, 0, 0);
+      if (dueDate < today) {
+        setError('No puedes crear una tarea con fecha anterior a hoy.');
+        setLoading(false);
+        return;
+      }
+
       const taskData = {
         ...formData,
         dueDate: new Date(formData.dueDate).toISOString()
