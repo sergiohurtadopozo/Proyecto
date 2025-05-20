@@ -54,7 +54,7 @@ const TaskForm = ({ task, onSubmit: onSubmitProp, onClose }) => {
       const dueDate = new Date(formData.dueDate);
       dueDate.setHours(0, 0, 0, 0);
       if (dueDate < today) {
-        setError('No puedes crear una tarea con fecha anterior a hoy.');
+        setError('fecha');
         setLoading(false);
         return;
       }
@@ -115,7 +115,7 @@ const TaskForm = ({ task, onSubmit: onSubmitProp, onClose }) => {
             value={formData.title}
             onChange={handleChange}
             required
-            className={error ? 'error' : ''}
+            className={error && error !== 'fecha' ? 'error' : ''}
           />
         </div>
         <div className="form-group">
@@ -126,7 +126,7 @@ const TaskForm = ({ task, onSubmit: onSubmitProp, onClose }) => {
             value={formData.description}
             onChange={handleChange}
             rows="3"
-            className={error ? 'error' : ''}
+            className={error && error !== 'fecha' ? 'error' : ''}
           />
         </div>
         <div className="form-group">
@@ -136,7 +136,7 @@ const TaskForm = ({ task, onSubmit: onSubmitProp, onClose }) => {
             name="priority"
             value={formData.priority}
             onChange={handleChange}
-            className={error ? 'error' : ''}
+            className={error && error !== 'fecha' ? 'error' : ''}
           >
             <option value="low">Baja</option>
             <option value="medium">Media</option>
@@ -150,7 +150,7 @@ const TaskForm = ({ task, onSubmit: onSubmitProp, onClose }) => {
             name="status"
             value={formData.status}
             onChange={handleChange}
-            className={error ? 'error' : ''}
+            className={error && error !== 'fecha' ? 'error' : ''}
           >
             <option value="pending">Pendiente</option>
             <option value="in_progress">En Progreso</option>
@@ -166,9 +166,12 @@ const TaskForm = ({ task, onSubmit: onSubmitProp, onClose }) => {
             value={formData.dueDate}
             onChange={handleChange}
             required
-            className={error ? 'error' : ''}
+            className={error === 'fecha' ? 'error' : ''}
           />
         </div>
+        {error === 'fecha' && (
+          <div className="error-message">No puedes crear una tarea con fecha anterior a hoy.</div>
+        )}
         <div className="form-actions">
           <button type="submit" disabled={loading}>
             {loading ? 'Procesando...' : (task ? 'Actualizar' : 'Crear')}
