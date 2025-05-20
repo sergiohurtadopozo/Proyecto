@@ -120,6 +120,19 @@ function CalendarView({ tasks: propTasks }) {
       ].filter(Boolean).join(' ');
       const tasksForDay = getTasksForDate(date);
 
+      // Determinar símbolo solo en dashboard normal
+      let symbol = '';
+      if (!propTasks && tasksForDay.length > 0) {
+        // Si todas las tareas del día son compartidas
+        if (tasksForDay.every(task => task.sharedTaskId || task.isShared)) {
+          symbol = '🤝';
+        } else if (tasksForDay.every(task => !(task.sharedTaskId || task.isShared))) {
+          symbol = '📌';
+        } else {
+          symbol = '📌/🤝';
+        }
+      }
+
       return (
         <div
           key={index}
@@ -129,7 +142,7 @@ function CalendarView({ tasks: propTasks }) {
           {date.getDate()}
           {tasksForDay.length > 0 && (
             <span className="day-tasks">
-              {tasksForDay.length}
+              {tasksForDay.length} {symbol}
             </span>
           )}
         </div>
