@@ -5,6 +5,7 @@ import { useAuth } from '../context/AuthContext';
 import { useTasks } from '../context/TaskContext';
 import '../estilos/AdminDashboard.css';
 import CalendarView from './CalendarView';
+import { taskService } from '../services/taskService';
 
 function AdminDashboard() {
   const [loading, setLoading] = useState(true);
@@ -20,6 +21,7 @@ function AdminDashboard() {
     totalUsers: 0,
     totalSharedTasks: 0
   });
+  const [allTasks, setAllTasks] = useState([]);
   const navigate = useNavigate();
   const { user } = useAuth();
   const { tasks, fetchTasks } = useTasks();
@@ -49,8 +51,10 @@ function AdminDashboard() {
           return;
         }
 
-        await fetchTasks();
-        calculateStats(tasks);
+        // Obtener todas las tareas si es admin
+        const all = await taskService.getAllTasks();
+        setAllTasks(all);
+        calculateStats(all);
       } catch (error) {
         console.error('Error al obtener los datos:', error);
         setError('No se pudieron cargar los datos. Por favor, intenta nuevamente.');
@@ -62,7 +66,7 @@ function AdminDashboard() {
 
     fetchData();
     // eslint-disable-next-line
-  }, [navigate, user, fetchTasks, calculateStats]);
+  }, [navigate, user, calculateStats]);
 
   const filteredTasks = tasks.filter(task => {
     const matchesSearch = task.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -149,8 +153,18 @@ function AdminDashboard() {
           </div>
 
           <div className="task-list">
-            {filteredTasks.length > 0 ? (
-              filteredTasks.map(task => (
+            {allTasks.filter(task => {
+              const matchesSearch = task.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                                   task.description.toLowerCase().includes(searchTerm.toLowerCase());
+              const matchesStatus = statusFilter === 'all' || task.status === statusFilter;
+              return matchesSearch && matchesStatus;
+            }).length > 0 ? (
+              allTasks.filter(task => {
+                const matchesSearch = task.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                                     task.description.toLowerCase().includes(searchTerm.toLowerCase());
+                const matchesStatus = statusFilter === 'all' || task.status === statusFilter;
+                return matchesSearch && matchesStatus;
+              }).map(task => (
                 <div key={task.id} className="task-card">
                   <h3>{task.title}</h3>
                   <p>{task.description}</p>
@@ -171,7 +185,7 @@ function AdminDashboard() {
           </div>
         </>
       ) : (
-        <CalendarView />
+        <CalendarView tasks={allTasks} />
       )}
     </div>
   );

@@ -8,7 +8,7 @@ import timeGridPlugin from '@fullcalendar/timegrid';
 import interactionPlugin from '@fullcalendar/interaction';
 import '../estilos/CalendarView.css';
 
-function CalendarView() {
+function CalendarView({ tasks: propTasks }) {
   const [currentDate, setCurrentDate] = useState(new Date());
   const [selectedDate, setSelectedDate] = useState(null);
   const [showSharedTasks, setShowSharedTasks] = useState(false);
@@ -29,8 +29,8 @@ function CalendarView() {
     }
   };
 
-  // Usar la lista seleccionada
-  const calendarTasks = showSharedTasks ? sharedTasks.map(st => st.Task) : tasks;
+  // Usar las tareas pasadas por props si existen (modo admin), si no, usar las del contexto
+  const calendarTasks = propTasks ? propTasks : (showSharedTasks ? sharedTasks.map(st => st.Task) : tasks);
 
   const getDaysInMonth = (date) => {
     return new Date(date.getFullYear(), date.getMonth() + 1, 0).getDate();
@@ -176,26 +176,6 @@ function CalendarView() {
         ))}
         {renderCalendarDays()}
       </div>
-      {selectedDate && (
-        <div className="task-list">
-          <h3>Tareas para {selectedDate.toLocaleDateString('es')}</h3>
-          {getTasksForDate(selectedDate).map(task => (
-            <div key={task.id} className="task-item">
-              <h4>{task.title}</h4>
-              <p>{task.description}</p>
-              <div className="task-actions">
-                <select
-                  value={task.status}
-                  onChange={(e) => handleTaskStatusChange(task.id, e.target.value)}
-                >
-                  <option value="pending">Pendiente</option>
-                  <option value="completed">Completada</option>
-                </select>
-              </div>
-            </div>
-          ))}
-        </div>
-      )}
     </div>
   );
 }

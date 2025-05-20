@@ -187,6 +187,24 @@ const taskService = {
             }
             throw new Error('Error al eliminar la tarea compartida');
         }
+    },
+
+    // Obtener todas las tareas (solo admin)
+    getAllTasks: async () => {
+        try {
+            const response = await axios.get(`${API_URL}/tasks/all`, {
+                headers: getAuthHeader()
+            });
+            return response.data;
+        } catch (error) {
+            if (error.response?.status === 401) {
+                throw new Error('Sesión expirada');
+            }
+            if (error.response?.data?.message) {
+                throw new Error(error.response.data.message);
+            }
+            throw new Error('Error al obtener todas las tareas');
+        }
     }
 };
 

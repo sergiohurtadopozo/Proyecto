@@ -119,4 +119,25 @@ router.delete('/:id', authenticate, async (req, res) => {
   }
 });
 
+// Obtener todas las tareas (solo admin)
+router.get('/all', authenticate, async (req, res) => {
+  try {
+    if (!req.user || req.user.role !== 'admin') {
+      return res.status(403).json({ message: 'No autorizado' });
+    }
+    const tasks = await Task.findAll({
+      include: [
+        {
+          model: User,
+          attributes: ['id', 'username', 'email']
+        }
+      ]
+    });
+    res.json(tasks);
+  } catch (error) {
+    console.error('Error al obtener todas las tareas:', error);
+    res.status(500).json({ message: 'Error al obtener todas las tareas' });
+  }
+});
+
 module.exports = router;
