@@ -194,4 +194,135 @@
     .task-list {
         grid-template-columns: 1fr;
     }
+}
+
+.admin-users-section {
+    margin-top: 2rem;
+}
+
+.admin-users-table-wrapper {
+    overflow-x: auto;
+    background: #fff;
+    border-radius: 1rem;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+    padding: 1rem;
+    margin-bottom: 2rem;
+}
+
+.admin-users-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 1rem;
+}
+
+.admin-users-table th, .admin-users-table td {
+    padding: 0.75rem 1rem;
+    text-align: left;
+}
+
+.admin-users-table th {
+    background: #f3f4f6;
+    color: #4f46e5;
+    font-weight: 700;
+    border-bottom: 2px solid #e5e7eb;
+}
+
+.admin-users-table tr:nth-child(even) {
+    background: #f9fafb;
+}
+
+.admin-users-table tr:hover {
+    background: #e0e7ff;
+}
+
+.admin-btn {
+    padding: 0.4rem 1rem;
+    border-radius: 0.5rem;
+    border: none;
+    font-size: 0.95rem;
+    font-weight: 600;
+    margin-right: 0.3rem;
+    cursor: pointer;
+    transition: background 0.2s, color 0.2s;
+}
+
+.admin-btn-view {
+    background: #4f46e5;
+    color: #fff;
+}
+
+.admin-btn-view:hover {
+    background: #4338ca;
+}
+
+.admin-btn-delete {
+    background: #fee2e2;
+    color: #dc2626;
+}
+
+.admin-btn-delete:hover {
+    background: #fecaca;
+}
+
+.admin-btn-close {
+    background: #e5e7eb;
+    color: #374151;
+    margin-top: 1rem;
+}
+
+.admin-btn-close:hover {
+    background: #cbd5e1;
+}
+
+.admin-user-tasks-modal {
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: rgba(0,0,0,0.15);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 2000;
+}
+
+.admin-user-tasks-content {
+    background: #fff;
+    border-radius: 1rem;
+    padding: 2rem 1.5rem;
+    min-width: 320px;
+    max-width: 95vw;
+    box-shadow: 0 4px 24px rgba(0,0,0,0.12);
+}
+
+.admin-user-tasks-list {
+    list-style: none;
+    padding: 0;
+    margin: 1rem 0 0 0;
+}
+
+.admin-user-task-item {
+    background: #f3f4f6;
+    border-radius: 0.5rem;
+    padding: 0.7rem 1rem;
+    margin-bottom: 0.7rem;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    font-size: 1rem;
+}
+
+.admin-user-task-date {
+    color: #6b7280;
+    font-size: 0.95rem;
+}
+
+@media (max-width: 700px) {
+    .admin-user-tasks-content {
+        padding: 1rem 0.5rem;
+        min-width: 90vw;
+    }
+
+    .admin-users-table th, .admin-users-table td {
+        padding: 0.5rem 0.3rem;
+        font-size: 0.95rem;
+    }
 } 
