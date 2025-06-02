@@ -15,8 +15,10 @@ function Dashboard() {
   const [error, setError] = useState(null);
   const [showTaskForm, setShowTaskForm] = useState(false);
   const [showSharedTasks, setShowSharedTasks] = useState(false);
-  const { fetchTasks } = useTasks();
+  const { fetchTasks, tasks } = useTasks();
   const navigate = useNavigate();
+  const [showNotification, setShowNotification] = useState(false);
+  const [tasksDueTomorrow, setTasksDueTomorrow] = useState([]);
 
   useEffect(() => {
     const fetchProfile = async () => {
@@ -44,6 +46,19 @@ function Dashboard() {
 
     fetchProfile();
   }, [navigate, fetchTasks]);
+
+  useEffect(() => {
+    const tomorrow = new Date();
+    tomorrow.setDate(tomorrow.getDate() + 1);
+    tomorrow.setHours(0, 0, 0, 0);
+    const dueTomorrow = tasks.filter(task => {
+      const dueDate = new Date(task.dueDate);
+      dueDate.setHours(0, 0, 0, 0);
+      return dueDate.getTime() === tomorrow.getTime();
+    });
+    setTasksDueTomorrow(dueTomorrow);
+    setShowNotification(dueTomorrow.length > 0);
+  }, [tasks]);
 
   const handleTaskAdded = () => {
     setShowTaskForm(false);
@@ -73,6 +88,11 @@ function Dashboard() {
 
   return (
     <div className="dashboard-container">
+      {showNotification && (
+        <div className="notification-banner">
+          <strong>¡Atención!</strong> Tienes {tasksDueTomorrow.length} tarea(s) que vencen mañana.
+        </div>
+      )}
       <div className="dashboard-header">
         <h2>Dashboard</h2>
       </div>

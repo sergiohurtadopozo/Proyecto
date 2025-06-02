@@ -236,4 +236,14 @@
 .close-button:hover {
     background: #f7fafc;
     color: #2d3748;
+}
+
+.notification-banner {
+    background: #fbbf24;
+    color: #1f2937;
+    padding: 1rem;
+    border-radius: 0.5rem;
+    margin-bottom: 1rem;
+    text-align: center;
+    font-weight: 600;
 } 
