@@ -1,70 +1,115 @@
-# Getting Started with Create React App
+# 📅 Gestor de Tareas - Proyecto Fullstack
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+**Gestor de Tareas** es una aplicación web moderna y responsive para la gestión personal y colaborativa de tareas, con panel de usuario y panel de administrador. Permite crear, editar, compartir y visualizar tareas en un calendario, con notificaciones in-app y control de acceso por roles.
 
-## Available Scripts
+---
 
-In the project directory, you can run:
+## 🚀 Características principales
 
-### `npm start`
+- **Autenticación segura** (login, registro, recuperación de contraseña)
+- **Gestión de tareas**: crear, editar, eliminar, marcar como completadas
+- **Tareas compartidas**: comparte tareas con otros usuarios y gestiona solicitudes
+- **Calendario interactivo**: visualiza tus tareas y las compartidas, con símbolos diferenciadores
+- **Notificaciones in-app**: aviso cuando una tarea está próxima a vencer
+- **Panel de administración**: estadísticas, gestión global de tareas y usuarios
+- **Diseño responsive**: experiencia óptima en móvil, tablet y escritorio
+- **Accesibilidad y UX**: formularios claros, mensajes de error amigables, navegación fluida
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+---
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+## 🖥️ Tecnologías utilizadas
 
-### `npm test`
+- **Frontend:** React, React Router, Context API, CSS Modules
+- **Backend:** Node.js, Express, Sequelize, JWT (no incluido aquí)
+- **Base de datos:** PostgreSQL / MySQL (según configuración backend)
+- **Estilos:** CSS moderno, media queries, diseño mobile-first
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+---
 
-### `npm run build`
+## 📦 Estructura del proyecto
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+```
+/frontend
+  ├── src/
+  │   ├── components/         # Componentes React (Navbar, Dashboard, TaskForm, etc.)
+  │   ├── context/            # Contextos globales (Auth, Tasks)
+  │   ├── estilos/            # Archivos CSS por componente y globales
+  │   ├── services/           # Servicios para llamadas a la API
+  │   ├── App.jsx             # Enrutador principal
+  │   └── index.js            # Punto de entrada
+  └── public/
+```
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+---
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+## ⚡ Instalación y ejecución
 
-### `npm run eject`
+1. **Clona el repositorio:**
+   ```bash
+   git clone https://github.com/tuusuario/gestor-tareas.git
+   cd gestor-tareas/frontend
+   ```
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+2. **Instala las dependencias:**
+   ```bash
+   npm install
+   ```
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+3. **Configura las variables de entorno:**
+   - Crea un archivo `.env` y define la URL de tu backend:
+     ```
+     REACT_APP_API_URL=http://localhost:5000/api
+     ```
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+4. **Inicia la aplicación:**
+   ```bash
+   npm start
+   ```
+   La app estará disponible en [http://localhost:3000](http://localhost:3000)
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+---
 
-## Learn More
+## 📝 Uso básico
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+- **Registro/Login:** Crea una cuenta o inicia sesión.
+- **Gestión de tareas:** Crea, edita y elimina tareas desde el dashboard.
+- **Calendario:** Visualiza tus tareas y las compartidas, con símbolos diferenciadores.
+- **Notificaciones:** Recibe avisos cuando una tarea está próxima a vencer.
+- **Panel de admin:** Si eres administrador, accede a estadísticas y gestión global.
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+---
 
-### Code Splitting
+## 📱 Responsive y accesibilidad
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+- El diseño se adapta automáticamente a cualquier dispositivo.
+- Los botones y formularios son accesibles y fáciles de usar en móvil.
+- Sin scroll horizontal, fuentes y colores legibles.
 
-### Analyzing the Bundle Size
+---
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
+## 🛡️ Seguridad
 
-### Making a Progressive Web App
+- Autenticación con JWT.
+- Rutas protegidas según rol (usuario/admin).
+- Validación de formularios en frontend y backend.
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
+---
 
-### Advanced Configuration
+## 🛠️ Personalización y mejoras
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
+- Puedes cambiar los colores y estilos en `/src/estilos/global.css`.
+- Añade nuevas funcionalidades fácilmente gracias a la estructura modular.
+- Integra notificaciones push, emails reales o más roles según tus necesidades.
 
-### Deployment
+---
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
+## 🤝 Contribuciones
 
-### `npm run build` fails to minify
+¡Las contribuciones son bienvenidas!  
+Abre un issue o pull request para sugerir mejoras, reportar bugs o proponer nuevas funcionalidades.
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+---
+
+## 📄 Licencia
+
+MIT © [Tu Nombre o Usuario]
