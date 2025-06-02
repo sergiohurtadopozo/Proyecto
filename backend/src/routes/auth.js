@@ -138,4 +138,38 @@ router.post('/login', async (req, res) => {
   }
 });
 
+// Obtener todos los usuarios (solo admin)
+router.get('/users', authenticate, async (req, res) => {
+  try {
+    if (!req.user || req.user.role !== 'admin') {
+      return res.status(403).json({ error: 'No autorizado' });
+    }
+    const users = await User.findAll({
+      attributes: ['id', 'username', 'email', 'role', 'createdAt', 'updatedAt']
+    });
+    res.json(users);
+  } catch (err) {
+    console.error('Error al obtener usuarios:', err);
+    res.status(500).json({ error: 'Error al obtener usuarios' });
+  }
+});
+
+// Eliminar un usuario (solo admin)
+router.delete('/users/:id', authenticate, async (req, res) => {
+  try {
+    if (!req.user || req.user.role !== 'admin') {
+      return res.status(403).json({ error: 'No autorizado' });
+    }
+    const user = await User.findByPk(req.params.id);
+    if (!user) {
+      return res.status(404).json({ error: 'Usuario no encontrado' });
+    }
+    await user.destroy();
+    res.json({ message: 'Usuario eliminado correctamente' });
+  } catch (err) {
+    console.error('Error al eliminar usuario:', err);
+    res.status(500).json({ error: 'Error al eliminar usuario' });
+  }
+});
+
 module.exports = router;

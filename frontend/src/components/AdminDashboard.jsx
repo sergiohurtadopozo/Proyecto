@@ -6,6 +6,7 @@ import { useTasks } from '../context/TaskContext';
 import '../estilos/AdminDashboard.css';
 import CalendarView from './CalendarView';
 import { taskService } from '../services/taskService';
+import UserList from './UserList';
 
 function AdminDashboard() {
   const [loading, setLoading] = useState(true);
@@ -108,6 +109,9 @@ function AdminDashboard() {
           <button className="action-button secondary" onClick={() => setActiveTab('calendar')}>
             Calendario
           </button>
+          <button className="action-button secondary" onClick={() => setActiveTab('users')}>
+            Usuarios
+          </button>
         </div>
       </div>
 
@@ -184,8 +188,10 @@ function AdminDashboard() {
             )}
           </div>
         </>
-      ) : (
+      ) : activeTab === 'calendar' ? (
         <CalendarView tasks={allTasks} />
+      ) : (
+        <UserList />
       )}
     </div>
   );
