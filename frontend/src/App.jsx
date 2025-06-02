@@ -7,6 +7,7 @@ import Dashboard from './components/Dashboard';
 import AdminDashboard from './components/AdminDashboard';
 import Navbar from './components/Navbar';
 import { useAuth } from './context/AuthContext';
+import ForgotPassword from './components/ForgotPassword';
 import './estilos/App.css';
 
 function AppContent() {
@@ -26,6 +27,7 @@ function AppContent() {
             />
             <Route path="/login" element={<Login />} />
             <Route path="/signup" element={<SignUp />} />
+            <Route path="/forgot-password" element={<ForgotPassword />} />
             <Route
               path="/dashboard"
               element={
