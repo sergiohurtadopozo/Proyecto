@@ -56,6 +56,7 @@ const TaskForm = ({ task, onSubmit: onSubmitProp, onClose }) => {
       if (dueDate < today) {
         setError('fecha');
         setLoading(false);
+        alert('No puedes crear una tarea con fecha anterior a hoy.');
         return;
       }
 
