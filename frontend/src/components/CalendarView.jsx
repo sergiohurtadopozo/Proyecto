@@ -13,6 +13,8 @@ function CalendarView({ tasks: propTasks }) {
   const [selectedDate, setSelectedDate] = useState(null);
   const [showSharedTasks, setShowSharedTasks] = useState(false);
   const { tasks, sharedTasks, fetchTasks, loading, error } = useTasks();
+  const [hoveredTasks, setHoveredTasks] = useState([]);
+  const [tooltipPos, setTooltipPos] = useState({ x: 0, y: 0 });
 
   useEffect(() => {
     fetchTasks();
@@ -123,7 +125,6 @@ function CalendarView({ tasks: propTasks }) {
       // Determinar símbolo solo en dashboard normal
       let symbol = '';
       if (!propTasks && tasksForDay.length > 0) {
-        // Si todas las tareas del día son compartidas
         if (tasksForDay.every(task => task.sharedTaskId || task.isShared)) {
           symbol = '🤝';
         } else if (tasksForDay.every(task => !(task.sharedTaskId || task.isShared))) {
@@ -133,11 +134,25 @@ function CalendarView({ tasks: propTasks }) {
         }
       }
 
+      // Tooltip handlers
+      const handleMouseEnter = (e) => {
+        if (tasksForDay.length > 0) {
+          const rect = e.target.getBoundingClientRect();
+          setTooltipPos({ x: rect.left + rect.width / 2, y: rect.top });
+          setHoveredTasks(tasksForDay);
+        }
+      };
+      const handleMouseLeave = () => {
+        setHoveredTasks([]);
+      };
+
       return (
         <div
           key={index}
           className={dayClasses}
           onClick={() => handleDateClick(date)}
+          onMouseEnter={handleMouseEnter}
+          onMouseLeave={handleMouseLeave}
         >
           {date.getDate()}
           {tasksForDay.length > 0 && (
@@ -195,6 +210,19 @@ function CalendarView({ tasks: propTasks }) {
         ))}
         {renderCalendarDays()}
       </div>
+      {hoveredTasks.length > 0 && (
+        <div
+          className="calendar-tooltip"
+          style={{ left: tooltipPos.x, top: tooltipPos.y }}
+        >
+          <strong>Tareas del día:</strong>
+          <ul>
+            {hoveredTasks.map(task => (
+              <li key={task.id}>{task.title}</li>
+            ))}
+          </ul>
+        </div>
+      )}
     </div>
   );
 }

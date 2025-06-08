@@ -120,6 +120,42 @@
     color: #4f46e5;
 }
 
+.calendar-tooltip {
+    position: fixed;
+    z-index: 3000;
+    background: #fff;
+    color: #222;
+    border-radius: 0.5rem;
+    box-shadow: 0 4px 16px rgba(0,0,0,0.18);
+    padding: 0.7rem 1rem;
+    min-width: 180px;
+    max-width: 90vw;
+    font-size: 0.97rem;
+    border: 1px solid #e5e7eb;
+    pointer-events: none;
+    transform: translate(-50%, -110%);
+    transition: opacity 0.15s;
+}
+
+.calendar-tooltip ul {
+    margin: 0.3rem 0 0 0;
+    padding: 0 0 0 1.1rem;
+    font-size: 0.95rem;
+}
+
+.calendar-tooltip li {
+    margin-bottom: 0.2rem;
+    word-break: break-word;
+}
+
+@media (max-width: 600px) {
+    .calendar-tooltip {
+        font-size: 0.9rem;
+        min-width: 120px;
+        padding: 0.5rem 0.5rem;
+    }
+}
+
 @media (max-width: 768px) {
     .calendar-view {
         padding: 1rem;
