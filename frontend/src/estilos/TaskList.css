@@ -163,4 +163,26 @@
         margin: 1rem;
         padding: 1rem;
     }
+}
+
+@media (max-width: 500px) {
+    .task-list-container {
+        padding: 0.2rem;
+    }
+    .task-list-header h2 {
+        font-size: 1.1rem;
+    }
+    .btn-primary, .btn-secondary {
+        width: 100%;
+        min-width: unset;
+        font-size: 0.95rem;
+        padding: 0.7rem 0.2rem;
+    }
+    .task-list {
+        grid-template-columns: 1fr;
+        gap: 0.7rem;
+    }
+    .task-form-container {
+        padding: 0.2rem;
+    }
 } 

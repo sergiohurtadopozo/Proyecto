@@ -150,4 +150,21 @@ button[type="submit"]:hover, .btn-submit:hover {
         padding: 1rem;
         font-size: 1.1rem;
     }
+}
+
+@media (max-width: 400px) {
+    .task-form {
+        padding: 0.2rem 0.01rem;
+        max-width: 99vw;
+        border-radius: 0.2rem;
+    }
+    .form-actions {
+        flex-direction: column;
+        gap: 0.2rem;
+    }
+    button[type="submit"], .btn-submit {
+        width: 100%;
+        padding: 0.8rem;
+        font-size: 1rem;
+    }
 } 
