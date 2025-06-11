@@ -10,7 +10,7 @@ const Navbar = () => {
     <nav className="navbar">
       <div className="navbar-inner">
         <Link to="/" className="navbar-logo">
-          Gestor de Tareas
+          TaskFlow
         </Link>
         <div className="navbar-links">
           {isAuthenticated ? (
