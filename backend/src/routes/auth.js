@@ -173,8 +173,4 @@ router.delete('/users/:id', authenticate, async (req, res) => {
   }
 });
 
-// Recuperación de contraseña
-router.post('/forgot-password', authController.forgotPassword);
-router.post('/reset-password', authController.resetPassword);
-
 module.exports = router;
