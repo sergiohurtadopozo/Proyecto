@@ -1,11 +1,6 @@
-// backend/src/routes/auth.js
-const express = require('express');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const { User } = require('../models');
-const { authenticate } = require('../middleware/auth');
-const router = express.Router();
-const authController = require('../controllers/authController');
 
 // Validación de datos de entrada
 const validateUserData = (data) => {
@@ -22,15 +17,8 @@ const validateUserData = (data) => {
   return errors;
 };
 
-// Rutas de autenticación
-router.get('/me', authenticate, authController.getCurrentUser);
-router.post('/register', authController.register);
-router.post('/login', authController.login);
-router.get('/users', authenticate, authController.getAllUsers);
-router.delete('/users/:id', authenticate, authController.deleteUser);
-
 // Obtener información del usuario actual
-router.get('/me', authenticate, async (req, res) => {
+const getCurrentUser = async (req, res) => {
   try {
     const user = await User.findOne({
       where: { id: req.user.id },
@@ -43,13 +31,13 @@ router.get('/me', authenticate, async (req, res) => {
 
     res.json(user);
   } catch (err) {
-    console.error('Error en /me:', err);
+    console.error('Error en getCurrentUser:', err);
     res.status(500).json({ error: 'Error al obtener información del usuario' });
   }
-});
+};
 
 // Registro de usuario
-router.post('/register', async (req, res) => {
+const register = async (req, res) => {
   try {
     const { username, email, password, secretCode } = req.body;
 
@@ -97,13 +85,13 @@ router.post('/register', async (req, res) => {
       }
     });
   } catch (err) {
-    console.error('Error en /register:', err);
+    console.error('Error en register:', err);
     return res.status(500).json({ error: 'Error al registrar el usuario' });
   }
-});
+};
 
 // Login de usuario
-router.post('/login', async (req, res) => {
+const login = async (req, res) => {
   try {
     const { email, password } = req.body;
 
@@ -141,13 +129,13 @@ router.post('/login', async (req, res) => {
       }
     });
   } catch (err) {
-    console.error('Error en /login:', err);
+    console.error('Error en login:', err);
     return res.status(500).json({ error: 'Error al iniciar sesión' });
   }
-});
+};
 
 // Obtener todos los usuarios (solo admin)
-router.get('/users', authenticate, async (req, res) => {
+const getAllUsers = async (req, res) => {
   try {
     if (!req.user || req.user.role !== 'admin') {
       return res.status(403).json({ error: 'No autorizado' });
@@ -160,10 +148,10 @@ router.get('/users', authenticate, async (req, res) => {
     console.error('Error al obtener usuarios:', err);
     res.status(500).json({ error: 'Error al obtener usuarios' });
   }
-});
+};
 
 // Eliminar un usuario (solo admin)
-router.delete('/users/:id', authenticate, async (req, res) => {
+const deleteUser = async (req, res) => {
   try {
     if (!req.user || req.user.role !== 'admin') {
       return res.status(403).json({ error: 'No autorizado' });
@@ -178,7 +166,12 @@ router.delete('/users/:id', authenticate, async (req, res) => {
     console.error('Error al eliminar usuario:', err);
     res.status(500).json({ error: 'Error al eliminar usuario' });
   }
-});
+};
 
-// NO debe haber rutas de recuperación de contraseña
-module.exports = router;
+module.exports = {
+  getCurrentUser,
+  register,
+  login,
+  getAllUsers,
+  deleteUser
+}; 
