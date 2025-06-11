@@ -92,6 +92,19 @@ const TaskItem = ({ task, onTaskChange, isShared }) => {
     }
   };
 
+  const getStatusColor = (status) => {
+    switch (status) {
+      case 'pending':
+        return '#d97706';
+      case 'in_progress':
+        return '#2563eb';
+      case 'completed':
+        return '#16a34a';
+      default:
+        return '#6b7280';
+    }
+  };
+
   return (
     <div className="task-item">
       <div className="task-header">
@@ -155,11 +168,24 @@ const TaskItem = ({ task, onTaskChange, isShared }) => {
 
         <div className="task-detail">
           <span className="detail-label">Estado:</span>
-          <span className={`status-badge status-${task.status || 'pending'}`}> 
-            {task.status === 'pending' ? 'Pendiente' :
-             task.status === 'in_progress' ? 'En Progreso' :
-             task.status === 'completed' ? 'Completada' : 'Pendiente'}
-          </span>
+          {isOwner ? (
+            <select
+              value={task.status}
+              onChange={handleStatusChange}
+              className="status-select"
+              style={{ borderColor: getStatusColor(task.status) }}
+            >
+              <option value="pending">Pendiente</option>
+              <option value="in_progress">En Progreso</option>
+              <option value="completed">Completada</option>
+            </select>
+          ) : (
+            <span className={`status-badge status-${task.status || 'pending'}`}> 
+              {task.status === 'pending' ? 'Pendiente' :
+               task.status === 'in_progress' ? 'En Progreso' :
+               task.status === 'completed' ? 'Completada' : 'Pendiente'}
+            </span>
+          )}
         </div>
 
         {task.sharedWith && (
