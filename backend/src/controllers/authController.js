@@ -1,6 +1,7 @@
 const jwt = require('jsonwebtoken');
 const User = require('../models/User');
-const bcrypt = require('bcrypt');
+const bcrypt = require('bcryptjs');
 
-// ... otras funciones ...
-// Eliminadas las funciones de recuperación de contraseña 
+// Aquí irían las funciones de login, registro y gestión de usuario
+// Ejemplo de login y registro (puedes copiar de tus rutas si lo necesitas)
+// ... otras funciones ... 

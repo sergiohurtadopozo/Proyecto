@@ -1,10 +1,30 @@
 const express = require('express');
+const cors = require('cors');
 const taskRoutes = require('./routes/taskRoutes');
 const authRoutes = require('./routes/auth');
 const profileRoutes = require('./routes/profile');
 const sharedTaskRoutes = require('./routes/sharedTaskRoutes');
 
 const app = express();
+
+// CORS robusto: solo orígenes permitidos y gestión de preflight
+const allowedOrigins = [
+  'https://proyecto-six-zeta.vercel.app',
+  'http://localhost:3000'
+];
+app.use(cors({
+  origin: function (origin, callback) {
+    if (!origin || allowedOrigins.includes(origin)) {
+      callback(null, true);
+    } else {
+      callback(new Error('No permitido por CORS'));
+    }
+  },
+  credentials: true,
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization']
+}));
+app.options('*', cors());
 
 // Middleware
 app.use(express.json());

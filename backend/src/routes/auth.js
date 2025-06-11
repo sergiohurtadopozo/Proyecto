@@ -173,4 +173,5 @@ router.delete('/users/:id', authenticate, async (req, res) => {
   }
 });
 
+// NO debe haber rutas de recuperación de contraseña
 module.exports = router;
