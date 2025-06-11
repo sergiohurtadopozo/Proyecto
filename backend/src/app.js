@@ -1,30 +1,10 @@
 const express = require('express');
-const cors = require('cors');
 const taskRoutes = require('./routes/taskRoutes');
 const authRoutes = require('./routes/auth');
 const profileRoutes = require('./routes/profile');
 const sharedTaskRoutes = require('./routes/sharedTaskRoutes');
 
 const app = express();
-
-// CORS robusto: solo orígenes permitidos y gestión de preflight
-const allowedOrigins = [
-  'https://proyecto-six-zeta.vercel.app',
-  'http://localhost:3000'
-];
-app.use(cors({
-  origin: function (origin, callback) {
-    if (!origin || allowedOrigins.includes(origin)) {
-      callback(null, true);
-    } else {
-      callback(new Error('No permitido por CORS'));
-    }
-  },
-  credentials: true,
-  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
-  allowedHeaders: ['Content-Type', 'Authorization']
-}));
-app.options('*', cors());
 
 // Middleware
 app.use(express.json());
@@ -43,8 +23,8 @@ app.get('/api/test', (req, res) => {
 
 // Manejo de errores
 app.use((err, req, res, next) => {
-    console.error('Error middleware:', err.stack);
-    res.status(500).json({ message: 'Error interno del servidor', error: err.message });
+    console.error(err.stack);
+    res.status(500).json({ message: 'Error interno del servidor' });
 });
 
 module.exports = app; 
