@@ -5,6 +5,7 @@ const jwt = require('jsonwebtoken');
 const { User } = require('../models');
 const { authenticate } = require('../middleware/auth');
 const router = express.Router();
+const authController = require('../controllers/authController');
 
 // Validación de datos de entrada
 const validateUserData = (data) => {
@@ -171,5 +172,9 @@ router.delete('/users/:id', authenticate, async (req, res) => {
     res.status(500).json({ error: 'Error al eliminar usuario' });
   }
 });
+
+// Recuperación de contraseña
+router.post('/forgot-password', authController.forgotPassword);
+router.post('/reset-password', authController.resetPassword);
 
 module.exports = router;

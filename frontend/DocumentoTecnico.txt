@@ -1,0 +1,153 @@
+PROYECTO FINAL DE GRADO: GESTOR DE TAREAS - DOCUMENTO TÉCNICO DETALLADO
+=======================================================================
+
+1. CONTEXTO Y MOTIVACIÓN DEL PROYECTO
+-------------------------------------
+La gestión de tareas es un desafío cotidiano tanto en el ámbito personal como profesional. La proliferación del trabajo remoto y la necesidad de colaboración digital han incrementado la demanda de herramientas que permitan organizar, compartir y supervisar tareas de manera eficiente, intuitiva y segura. Este proyecto surge como respuesta a esa necesidad, integrando principios de usabilidad, accesibilidad y escalabilidad tecnológica.
+
+2. ANÁLISIS DE USUARIOS Y ESCENARIOS DE USO
+--------------------------------------------
+- **Usuarios estándar:** Personas que desean organizar sus tareas, recibir recordatorios y colaborar con otros usuarios.
+- **Administradores:** Responsables de la gestión global, pueden supervisar usuarios, tareas y estadísticas del sistema.
+- **Escenarios clave:**
+  - Un usuario crea una tarea, la edita, la marca como completada o la elimina.
+  - Un usuario comparte una tarea con otro usuario y gestiona solicitudes de colaboración.
+  - Un administrador revisa el calendario global, filtra tareas, elimina usuarios y consulta estadísticas.
+
+3. JUSTIFICACIÓN TECNOLÓGICA Y ELECCIÓN DE HERRAMIENTAS
+--------------------------------------------------------
+- **React:** Permite construir interfaces reactivas, modulares y fácilmente escalables.
+- **Context API:** Facilita el manejo global del estado (tareas, autenticación) sin prop drilling.
+- **Axios:** Cliente HTTP robusto para la comunicación con el backend.
+- **CSS modularizado:** Permite mantener estilos limpios, reutilizables y adaptados a cada componente.
+- **Arquitectura basada en componentes:** Favorece la mantenibilidad y la reutilización.
+
+4. ESTRUCTURA DE CARPETAS Y DESCRIPCIÓN DE ARCHIVOS
+----------------------------------------------------
+- **src/components/**
+  - *Navbar.jsx*: Barra de navegación, lógica de enlaces según autenticación y rol.
+  - *Dashboard.jsx*: Vista principal del usuario, integra TaskList, CalendarView y notificaciones.
+  - *TaskForm.jsx*: Formulario controlado para crear/editar tareas, con validaciones y feedback inmediato.
+  - *TaskList.jsx*: Renderiza la lista de tareas, usa TaskItem para cada una.
+  - *TaskItem.jsx*: Tarjeta de tarea, permite editar, eliminar, compartir y cambiar estado.
+  - *CalendarView.jsx*: Calendario mensual, muestra tareas por día, tooltip con detalles al hacer hover.
+  - *AdminDashboard.jsx*: Panel de administración, estadísticas, filtros, gestión de usuarios y tareas.
+  - *UserList.jsx*: Listado de usuarios, acciones de ver tareas (modal) y eliminar.
+  - *Login.jsx, SignUp.jsx, ForgotPassword.jsx*: Formularios de autenticación y recuperación.
+  - *ShareRequests.jsx*: Gestión de solicitudes de compartir tareas.
+- **src/services/**
+  - *userService.js*: Métodos para obtener y eliminar usuarios (admin), autenticación JWT.
+  - *taskService.js*: Métodos para CRUD de tareas y compartir tareas.
+- **src/context/**
+  - *TaskContext.js*: Estado global de tareas, métodos para manipularlas.
+  - *AuthContext.js*: Estado de autenticación, usuario actual, login/logout/registro.
+- **src/estilos/**
+  - Archivos CSS por componente, con media queries y estilos responsive.
+- **src/api.js**: Funciones auxiliares para peticiones HTTP.
+
+5. DESCRIPCIÓN DETALLADA DE FUNCIONES Y LÓGICA
+----------------------------------------------
+- **Validaciones en TaskForm:**
+  - Todos los campos son obligatorios.
+  - La fecha límite no puede ser anterior a hoy (alerta emergente, sin mensaje visual para evitar desajustes).
+  - Feedback inmediato en campos erróneos.
+- **Tooltip en CalendarView:**
+  - Al hacer hover sobre un día con tareas, aparece un tooltip mostrando los títulos de las tareas de ese día.
+  - El tooltip es responsivo y no interfiere con el clic.
+- **Flujo de compartir tareas:**
+  - Un usuario puede compartir una tarea con otro ingresando su email.
+  - El receptor recibe una solicitud y puede aceptarla o rechazarla.
+- **Gestión de usuarios (admin):**
+  - El admin puede ver todos los usuarios, ver sus tareas (modal) y eliminarlos.
+  - Confirmación antes de eliminar para evitar acciones accidentales.
+
+6. FLUJOS DE USUARIO (EJEMPLOS PASO A PASO)
+--------------------------------------------
+- **Crear tarea:**
+  1. El usuario pulsa "Crear Nueva Tarea".
+  2. Se abre TaskForm, completa los campos y selecciona una fecha válida.
+  3. Si la fecha es anterior a hoy, aparece un alert y no se crea la tarea.
+  4. Al guardar, la tarea aparece en la lista y en el calendario.
+- **Ver tareas en el calendario:**
+  1. El usuario navega por el calendario.
+  2. Al pasar el mouse sobre un día con tareas, ve un tooltip con los títulos.
+  3. Al hacer clic, puede ver más detalles o editar la tarea.
+- **Eliminar usuario (admin):**
+  1. El admin accede a la pestaña de usuarios.
+  2. Pulsa "Eliminar" en un usuario.
+  3. Aparece una confirmación; si acepta, el usuario se elimina y desaparece de la lista.
+
+7. DECISIONES DE DISEÑO Y USABILIDAD
+-------------------------------------
+- **Responsividad:**
+  - Uso de media queries para adaptar layouts, fuentes y paddings a móviles y tablets.
+  - Tablas y listas con scroll horizontal en pantallas pequeñas.
+- **Accesibilidad:**
+  - Contrastes de color adecuados.
+  - Botones y enlaces grandes y fácilmente tocables.
+  - Navegación clara y consistente.
+- **Feedback inmediato:**
+  - Mensajes de error claros y alertas para acciones críticas.
+  - Confirmaciones para eliminar tareas/usuarios.
+- **Separación de lógica y presentación:**
+  - Servicios y contextos para lógica de negocio.
+  - Componentes para presentación y experiencia de usuario.
+
+8. PRUEBAS REALIZADAS Y SUGERIDAS
+----------------------------------
+- **Pruebas manuales:**
+  - Navegación en Chrome, Firefox, Edge y dispositivos móviles.
+  - Validación de responsividad en diferentes resoluciones.
+  - Pruebas de accesibilidad (navegación por teclado, contraste, tamaño de botones).
+  - Pruebas de validaciones y manejo de errores en formularios.
+- **Pruebas sugeridas:**
+  - Tests unitarios de componentes y servicios (Jest, React Testing Library).
+  - Pruebas de integración de flujos completos.
+  - Pruebas de usabilidad con usuarios reales.
+
+9. POSIBLES MEJORAS FUTURAS
+----------------------------
+- Internacionalización (i18n) para múltiples idiomas.
+- Integración con notificaciones push y soporte offline (PWA).
+- Dashboard de analíticas para el administrador.
+- Mejoras en accesibilidad avanzada (roles ARIA, navegación por voz).
+- Tests automáticos y CI/CD.
+
+10. ANEXOS
+----------
+- **Ejemplo de validación de fecha en TaskForm:**
+  ```js
+  if (dueDate < today) {
+    setError('fecha');
+    setLoading(false);
+    alert('No puedes crear una tarea con fecha anterior a hoy.');
+    return;
+  }
+  ```
+- **Ejemplo de tooltip en CalendarView:**
+  ```jsx
+  {hoveredTasks.length > 0 && (
+    <div className="calendar-tooltip" style={{ left: tooltipPos.x, top: tooltipPos.y }}>
+      <strong>Tareas del día:</strong>
+      <ul>
+        {hoveredTasks.map(task => (
+          <li key={task.id}>{task.title}</li>
+        ))}
+      </ul>
+    </div>
+  )}
+  ```
+- **Capturas de pantalla:**
+  (Incluir capturas de la vista principal, calendario, panel admin, formularios en móvil y escritorio)
+
+11. BIBLIOGRAFÍA Y RECURSOS
+---------------------------
+- Documentación oficial de React: https://react.dev/
+- Guía de estilos CSS responsive: https://css-tricks.com/snippets/css/media-queries-for-standard-devices/
+- Accesibilidad web (WAI): https://www.w3.org/WAI/
+- Documentación de axios: https://axios-http.com/
+- Buenas prácticas de UI/UX: https://uxdesign.cc/
+
+12. CONCLUSIÓN
+--------------
+El frontend del gestor de tareas implementa una arquitectura robusta, modular y escalable, con una experiencia de usuario cuidada y accesible. El código está preparado para evolucionar y adaptarse a nuevas necesidades, siguiendo los estándares actuales de desarrollo frontend profesional. Este documento proporciona una guía exhaustiva para cualquier desarrollador o tribunal académico que desee comprender, evaluar o extender el sistema. 
