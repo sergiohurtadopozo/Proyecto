@@ -202,32 +202,54 @@ const TaskItem = ({ task, onTaskChange, isShared }) => {
 
       {editing && (
         <form onSubmit={handleEditSubmit} className="task-form-edit">
-          <input
-            type="text"
-            value={editedTitle}
-            onChange={e => setEditedTitle(e.target.value)}
-            placeholder="Título"
-            required
-            className="form-input"
-          />
-          <textarea
-            value={editedDescription}
-            onChange={e => setEditedDescription(e.target.value)}
-            placeholder="Descripción"
-            className="form-textarea"
-          />
-          <select
-            value={editedStatus}
-            onChange={e => setEditedStatus(e.target.value)}
-            className="form-select"
-          >
-            <option value="pending">Pendiente</option>
-            <option value="in_progress">En Progreso</option>
-            <option value="completed">Completada</option>
-          </select>
+          <h4>✏️ Editar Tarea</h4>
+          
+          <div className="form-group">
+            <label htmlFor="edit-title">Título</label>
+            <input
+              id="edit-title"
+              type="text"
+              value={editedTitle}
+              onChange={e => setEditedTitle(e.target.value)}
+              placeholder="Ingresa el título de la tarea"
+              required
+              className="form-input"
+            />
+          </div>
+
+          <div className="form-group">
+            <label htmlFor="edit-description">Descripción</label>
+            <textarea
+              id="edit-description"
+              value={editedDescription}
+              onChange={e => setEditedDescription(e.target.value)}
+              placeholder="Describe los detalles de la tarea"
+              className="form-textarea"
+            />
+          </div>
+
+          <div className="form-group">
+            <label htmlFor="edit-status">Estado</label>
+            <select
+              id="edit-status"
+              value={editedStatus}
+              onChange={e => setEditedStatus(e.target.value)}
+              className="form-select"
+              style={{ borderColor: getStatusColor(editedStatus) }}
+            >
+              <option value="pending">Pendiente</option>
+              <option value="in_progress">En Progreso</option>
+              <option value="completed">Completada</option>
+            </select>
+          </div>
+
           <div className="form-actions">
-            <button type="submit" className="btn-save">Guardar</button>
-            <button type="button" onClick={() => setEditing(false)} className="btn-cancel">Cancelar</button>
+            <button type="button" onClick={() => setEditing(false)} className="btn-cancel">
+              <span>✕</span> Cancelar
+            </button>
+            <button type="submit" className="btn-save">
+              <span>💾</span> Guardar Cambios
+            </button>
           </div>
         </form>
       )}
