@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import '../estilos/Login.css';
+import { authService } from '../services/authService';
 
 const ForgotPassword = () => {
   const [email, setEmail] = useState('');
@@ -13,12 +14,10 @@ const ForgotPassword = () => {
     setError('');
     setLoading(true);
     try {
-      // Aquí deberías llamar a tu API real
-      // await api.post('/auth/forgot-password', { email });
-      await new Promise(res => setTimeout(res, 1000)); // Simulación
+      await authService.forgotPassword(email);
       setMessage('Si el correo existe, recibirás instrucciones para restablecer tu contraseña.');
     } catch (err) {
-      setError('Error al enviar la solicitud. Intenta de nuevo.');
+      setError(err.message || 'Error al enviar la solicitud. Intenta de nuevo.');
     } finally {
       setLoading(false);
     }

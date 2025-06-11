@@ -98,6 +98,30 @@ const authService = {
 
   logout() {
     localStorage.removeItem('token');
+  },
+
+  async forgotPassword(email) {
+    try {
+      const response = await axios.post(`${API_URL}/auth/forgot-password`, { email });
+      return response.data;
+    } catch (error) {
+      if (error.response?.data?.message) {
+        throw new Error(error.response.data.message);
+      }
+      throw new Error('Error al solicitar recuperación de contraseña');
+    }
+  },
+
+  async resetPassword(token, newPassword) {
+    try {
+      const response = await axios.post(`${API_URL}/auth/reset-password`, { token, newPassword });
+      return response.data;
+    } catch (error) {
+      if (error.response?.data?.message) {
+        throw new Error(error.response.data.message);
+      }
+      throw new Error('Error al restablecer la contraseña');
+    }
   }
 };
 
