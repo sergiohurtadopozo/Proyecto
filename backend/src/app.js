@@ -1,10 +1,20 @@
 const express = require('express');
+const cors = require('cors');
 const taskRoutes = require('./routes/taskRoutes');
 const authRoutes = require('./routes/auth');
 const profileRoutes = require('./routes/profile');
 const sharedTaskRoutes = require('./routes/sharedTaskRoutes');
 
 const app = express();
+
+// CORS: permitir frontend en Vercel y local
+app.use(cors({
+  origin: [
+    'https://proyecto-six-zeta.vercel.app',
+    'http://localhost:3000'
+  ],
+  credentials: true
+}));
 
 // Middleware
 app.use(express.json());
