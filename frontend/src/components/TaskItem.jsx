@@ -168,24 +168,11 @@ const TaskItem = ({ task, onTaskChange, isShared }) => {
 
         <div className="task-detail">
           <span className="detail-label">Estado:</span>
-          {isOwner ? (
-            <select
-              value={task.status}
-              onChange={handleStatusChange}
-              className="status-select"
-              style={{ borderColor: getStatusColor(task.status) }}
-            >
-              <option value="pending">Pendiente</option>
-              <option value="in_progress">En Progreso</option>
-              <option value="completed">Completada</option>
-            </select>
-          ) : (
-            <span className={`status-badge status-${task.status || 'pending'}`}> 
-              {task.status === 'pending' ? 'Pendiente' :
-               task.status === 'in_progress' ? 'En Progreso' :
-               task.status === 'completed' ? 'Completada' : 'Pendiente'}
-            </span>
-          )}
+          <span className={`status-badge status-${task.status || 'pending'}`}> 
+            {task.status === 'pending' ? 'Pendiente' :
+             task.status === 'in_progress' ? 'En Progreso' :
+             task.status === 'completed' ? 'Completada' : 'Pendiente'}
+          </span>
         </div>
 
         {task.sharedWith && (

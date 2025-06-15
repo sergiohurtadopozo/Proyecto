@@ -98,7 +98,13 @@ const UserList = () => {
               <ul className="admin-user-tasks-list">
                 {userTasks.map(task => (
                   <li key={task.id} className="admin-user-task-item">
-                    <strong>{task.title}</strong> <span className={`status ${task.status}`}>{task.status}</span> <span className="admin-user-task-date">{task.dueDate && new Date(task.dueDate).toLocaleDateString()}</span>
+                    <strong>{task.title}</strong> 
+                    <span className={`status ${task.status}`}>
+                      {task.status === 'pending' ? 'Pendiente' :
+                       task.status === 'in_progress' ? 'En Progreso' :
+                       task.status === 'completed' ? 'Completada' : 'Pendiente'}
+                    </span> 
+                    <span className="admin-user-task-date">{task.dueDate && new Date(task.dueDate).toLocaleDateString()}</span>
                   </li>
                 ))}
               </ul>
