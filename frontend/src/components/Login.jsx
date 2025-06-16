@@ -107,10 +107,6 @@ function Login({ onAuthSuccess }) {
           {loading ? 'Iniciando sesión...' : 'Iniciar Sesión'}
         </button>
 
-        <div className="forgot-password">
-          <Link to="/forgot-password">¿Olvidaste tu contraseña?</Link>
-        </div>
-
         {message && (
           <p className={`login-message ${message.includes('exitoso') ? 'success' : 'error'}`}>
             {message}

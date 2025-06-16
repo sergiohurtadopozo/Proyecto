@@ -133,23 +133,6 @@
     text-decoration: underline;
 }
 
-.forgot-password {
-    text-align: center;
-    margin-top: 1.5rem;
-}
-
-.forgot-password a {
-    color: #667eea;
-    text-decoration: none;
-    font-size: 0.875rem;
-    font-weight: 500;
-    transition: color 0.3s ease;
-}
-
-.forgot-password a:hover {
-    color: #764ba2;
-}
-
 .login-message {
     margin-top: 1.5rem;
     padding: 1rem;
