@@ -20,7 +20,7 @@ export const TaskProvider = ({ children }) => {
   const [error, setError] = useState(null);
   const { user } = useAuth();
 
-  const fetchTasks = async () => {
+  const fetchTasks = useCallback(async () => {
     try {
       setLoading(true);
       setError(null);
@@ -40,13 +40,13 @@ export const TaskProvider = ({ children }) => {
     } finally {
       setLoading(false);
     }
-  };
+  }, []);
 
   useEffect(() => {
     if (user) {
       fetchTasks();
     }
-  }, [user]);
+  }, [user, fetchTasks]);
 
   const addTask = async (taskData) => {
     const originalTasks = [...tasks];
