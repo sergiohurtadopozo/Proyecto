@@ -271,11 +271,11 @@ const TaskItem = ({ task, onTaskChange, isShared }) => {
           }</span>
         </div>
 
-        {task.isShared && (
+        {isOwner && task.isShared && task.sharedWith && task.sharedStatus === 'accepted' && (
           <div className="task-detail">
             <span className="detail-label">Compartida con:</span>
             <span className="detail-value">
-              {task.sharedWith?.email || 'Usuario desconocido'}
+              {task.sharedWith.username ? `${task.sharedWith.username} (${task.sharedWith.email})` : (task.sharedWith.email || 'Desconocido')}
             </span>
           </div>
         )}
