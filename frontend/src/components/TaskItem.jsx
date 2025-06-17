@@ -16,6 +16,7 @@ const TaskItem = ({ task, onTaskChange, isShared }) => {
   const [shareEmail, setShareEmail] = useState('');
   const [shareError, setShareError] = useState('');
   const [shareSuccess, setShareSuccess] = useState('');
+  const [showShareError, setShowShareError] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
 
   const isOwner = task.userId === user?.id;
@@ -83,10 +84,13 @@ const TaskItem = ({ task, onTaskChange, isShared }) => {
     setShareError('');
     setShareSuccess('');
     setIsLoading(true);
+    setShowShareError(false);
 
     if (!shareEmail) {
       setShareError('Por favor, ingresa un email válido');
+      setShowShareError(true);
       setIsLoading(false);
+      setTimeout(() => setShowShareError(false), 3000);
       return;
     }
 
@@ -106,10 +110,12 @@ const TaskItem = ({ task, onTaskChange, isShared }) => {
       } else {
         setShareError(error.message || 'Error al compartir la tarea');
       }
+      setShowShareError(true);
       setTimeout(() => {
         setSharing(false);
         setShareError('');
-      }, 3000);
+        setShowShareError(false);
+      }, 3500);
     } finally {
       setIsLoading(false);
     }
@@ -293,7 +299,14 @@ const TaskItem = ({ task, onTaskChange, isShared }) => {
             className="form-input"
             disabled={isLoading}
           />
-          {shareError && <p className="error-message">{shareError}</p>}
+          {showShareError && shareError && (
+            <div className="share-error-message">
+              {shareError}
+              <button type="button" className="close-error-btn" onClick={() => setShowShareError(false)}>
+                ×
+              </button>
+            </div>
+          )}
           {shareSuccess && <p className="success-message">{shareSuccess}</p>}
           <div className="form-actions">
             <button type="submit" className="btn-share" disabled={isLoading}>
