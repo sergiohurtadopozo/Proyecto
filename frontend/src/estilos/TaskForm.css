@@ -8,6 +8,7 @@
     padding: 2rem 0;
     background: rgba(255, 255, 255, 0.1);
     backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
 }
 
 .task-form {
@@ -47,6 +48,7 @@
     align-items: center;
     justify-content: center;
     border-radius: 50%;
+    touch-action: manipulation;
 }
 
 .close-btn:hover {
@@ -88,6 +90,8 @@ select {
     transition: all 0.2s ease;
     margin-bottom: 0.2rem;
     box-sizing: border-box;
+    -webkit-appearance: none;
+    appearance: none;
 }
 
 input[type="text"]:focus,
@@ -124,6 +128,7 @@ button[type="submit"] {
     display: flex;
     align-items: center;
     gap: 0.5rem;
+    touch-action: manipulation;
 }
 
 button[type="submit"]:hover {
@@ -149,10 +154,15 @@ button[type="submit"]:disabled {
 }
 
 @media (max-width: 768px) {
+    .task-form-container {
+        padding: 1rem 0;
+    }
+
     .task-form {
         padding: 1.5rem;
         max-width: 90%;
         margin: 1rem;
+        border-radius: 0.8rem;
     }
 
     .task-form h2 {
@@ -169,23 +179,7 @@ button[type="submit"]:disabled {
     textarea,
     select {
         padding: 0.625rem 0.875rem;
-    }
-}
-
-@media (max-width: 480px) {
-    .task-form-container {
-        padding: 1rem 0;
-    }
-
-    .task-form {
-        padding: 1.25rem;
-        max-width: 95%;
-        margin: 0.5rem;
-    }
-
-    .task-form h2 {
-        font-size: 1.25rem;
-        margin-bottom: 1.25rem;
+        font-size: 0.95rem;
     }
 
     .form-actions {
@@ -195,5 +189,69 @@ button[type="submit"]:disabled {
 
     button[type="submit"] {
         width: 100%;
+        padding: 0.75rem 1rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .task-form-container {
+        padding: 0.5rem 0;
+    }
+
+    .task-form {
+        padding: 1.25rem;
+        max-width: 95%;
+        margin: 0.5rem;
+        border-radius: 0.6rem;
+    }
+
+    .task-form h2 {
+        font-size: 1.25rem;
+        margin-bottom: 1.25rem;
+    }
+
+    .form-group label {
+        font-size: 0.9rem;
+    }
+
+    input[type="text"],
+    input[type="date"],
+    textarea,
+    select {
+        padding: 0.5rem 0.75rem;
+        font-size: 0.9rem;
+    }
+
+    textarea {
+        min-height: 100px;
+    }
+
+    .close-btn {
+        width: 28px;
+        height: 28px;
+        font-size: 1.3rem;
+    }
+}
+
+/* Mejoras para touch */
+@media (hover: none) {
+    .task-form:hover {
+        transform: none;
+    }
+
+    button[type="submit"]:hover {
+        transform: none;
+    }
+
+    .close-btn:hover {
+        background: none;
+    }
+
+    .close-btn:active {
+        background: #f3f4f6;
+    }
+
+    button[type="submit"]:active {
+        background-color: #4338ca;
     }
 } 
