@@ -193,6 +193,25 @@
     .logo-icon {
         font-size: 1.2rem;
     }
+
+    /* Overlay para el menú móvil */
+    .navbar-overlay {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: rgba(0, 0, 0, 0.5);
+        z-index: 999;
+        opacity: 0;
+        transition: opacity 0.3s ease;
+    }
+
+    .navbar-overlay.active {
+        display: block;
+        opacity: 1;
+    }
 }
 
 @media (max-width: 480px) {
@@ -235,5 +254,4 @@
         background: #e0e7ff;
         color: #4f46e5;
     }
-} 
 } 
