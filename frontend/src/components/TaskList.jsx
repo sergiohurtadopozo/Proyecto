@@ -15,7 +15,29 @@ const TaskList = ({ showSharedTasks, onTaskChange }) => {
     return <div className="error">{error}</div>;
   }
 
-  const currentTasks = showSharedTasks ? sharedTasks : tasks;
+  // Combinar tareas normales y compartidas
+  const allTasks = [...tasks];
+  
+  // Agregar información de compartido a las tareas que han sido compartidas
+  sharedTasks.forEach(sharedTask => {
+    const taskIndex = allTasks.findIndex(task => task.id === sharedTask.Task.id);
+    if (taskIndex !== -1) {
+      allTasks[taskIndex] = {
+        ...allTasks[taskIndex],
+        isShared: true,
+        sharedWith: sharedTask.Task.User
+      };
+    }
+  });
+
+  // Si estamos en modo "ver tareas compartidas", mostrar solo las tareas compartidas con el usuario
+  const currentTasks = showSharedTasks 
+    ? sharedTasks.map(st => ({
+        ...st.Task,
+        sharedTaskId: st.id,
+        sharedWith: st.Task.User
+      }))
+    : allTasks;
 
   return (
     <div className="task-list">
@@ -26,23 +48,14 @@ const TaskList = ({ showSharedTasks, onTaskChange }) => {
             : 'No tienes tareas pendientes'}
         </div>
       ) : (
-        currentTasks.map(task => {
-          // Si es tarea compartida, desanidar la información
-          const isShared = showSharedTasks;
-          const taskData = isShared && task.Task ? {
-            ...task.Task,
-            sharedTaskId: task.id, // id de la relación SharedTask
-            sharedWith: task.Task.User, // usuario dueño
-          } : task;
-          return (
-            <TaskItem 
-              key={isShared ? `shared-${task.id}` : task.id} 
-              task={taskData}
-              isShared={isShared}
-              onTaskChange={onTaskChange}
-            />
-          );
-        })
+        currentTasks.map(task => (
+          <TaskItem 
+            key={task.id} 
+            task={task}
+            isShared={showSharedTasks}
+            onTaskChange={onTaskChange}
+          />
+        ))
       )}
     </div>
   );

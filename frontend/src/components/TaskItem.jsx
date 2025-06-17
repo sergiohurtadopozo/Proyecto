@@ -131,9 +131,12 @@ const TaskItem = ({ task, onTaskChange, isShared }) => {
   };
 
   return (
-    <div className="task-item">
+    <div className={`task-item ${task.isShared ? 'shared' : ''}`}>
       <div className="task-header">
-        <h3 className="task-title">{task.title}</h3>
+        <h3 className="task-title">
+          {task.title}
+          {task.isShared && <span className="shared-badge">Compartida</span>}
+        </h3>
         <div className="task-actions">
           {isOwner && (
             <>
