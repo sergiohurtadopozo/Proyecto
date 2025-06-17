@@ -43,10 +43,12 @@ export const TaskProvider = ({ children }) => {
   }, []);
 
   useEffect(() => {
-    if (user) {
+    if (user && user.id) {
       fetchTasks();
     }
-  }, [user, fetchTasks]);
+    // Solo depende de user.id para evitar bucles
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [user?.id]);
 
   const addTask = async (taskData) => {
     const originalTasks = [...tasks];
