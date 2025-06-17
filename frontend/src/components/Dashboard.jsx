@@ -8,6 +8,7 @@ import TaskList from './TaskList';
 import ShareRequests from './ShareRequests';
 import { useTasks } from '../context/TaskContext';
 import '../estilos/Dashboard.css';
+import ErrorFallback from './ErrorFallback';
 
 function Dashboard() {
   const [profile, setProfile] = useState(null);
@@ -82,15 +83,7 @@ function Dashboard() {
   }
 
   if (error) {
-    return (
-      <div className="dashboard-container">
-        <h2>Dashboard</h2>
-        <p className="error-message">{error}</p>
-        <button className="action-button" onClick={() => window.location.reload()}>
-          Reintentar
-        </button>
-      </div>
-    );
+    return <ErrorFallback message={error} />;
   }
 
   return (
