@@ -37,7 +37,10 @@ const TaskList = ({ showSharedTasks, onTaskChange }) => {
     ? allSharedTasks.map(st => ({
         ...st.Task,
         sharedTaskId: st.id,
-        sharedWith: st.Task.User
+        sharedWith: st.Task.User,
+        ownerName: st.owner?.username || (st.owner && st.owner.username) || (st.ownerId && st.ownerId.username),
+        ownerEmail: st.owner?.email || (st.owner && st.owner.email) || (st.ownerId && st.ownerId.email),
+        sharedStatus: st.status
       }))
     : allTasks;
 
