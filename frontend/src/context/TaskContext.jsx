@@ -104,11 +104,19 @@ export const TaskProvider = ({ children }) => {
       // Actualizar inmediatamente las solicitudes pendientes
       const pending = await taskService.getPendingRequests();
       setPendingRequests(pending);
-      // Actualizar la tarea compartida en la lista de tareas
-      const updatedTask = await taskService.getTaskById(taskId);
-      setTasks(prev => prev.map(task => 
-        task.id === taskId ? { ...task, ...updatedTask } : task
-      ));
+      // Intentar actualizar la tarea compartida en la lista de tareas, pero ignorar error 404
+      try {
+        const updatedTask = await taskService.getTaskById(taskId);
+        setTasks(prev => prev.map(task => 
+          task.id === taskId ? { ...task, ...updatedTask } : task
+        ));
+      } catch (err) {
+        if (err.response && err.response.status === 404) {
+          // No hacer nada si la tarea no existe
+        } else {
+          throw err;
+        }
+      }
     } catch (err) {
       setError(err.message || 'Error al compartir la tarea');
       throw err;
