@@ -1,5 +1,5 @@
 // src/components/TaskItem.jsx
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useTasks } from '../context/TaskContext';
 import { useAuth } from '../context/AuthContext';
 import '../estilos/TaskItem.css';
@@ -16,11 +16,19 @@ const TaskItem = ({ task, onTaskChange, isShared }) => {
   const [shareEmail, setShareEmail] = useState('');
   const [shareError, setShareError] = useState('');
   const [shareSuccess, setShareSuccess] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
 
   const isOwner = task.userId === user?.id;
 
+  useEffect(() => {
+    setEditedTitle(task.title);
+    setEditedDescription(task.description);
+    setEditedStatus(task.status);
+  }, [task]);
+
   const handleStatusChange = async (e) => {
     try {
+      setIsLoading(true);
       await updateTask(task.id, { ...task, status: e.target.value });
       onTaskChange();
     } catch (error) {
@@ -29,12 +37,15 @@ const TaskItem = ({ task, onTaskChange, isShared }) => {
       setTimeout(() => {
         setError('');
       }, 3000);
+    } finally {
+      setIsLoading(false);
     }
   };
 
   const handleDelete = async () => {
     if (window.confirm('¿Estás seguro de que quieres eliminar esta tarea?')) {
       try {
+        setIsLoading(true);
         await deleteTask(task.id);
         onTaskChange();
       } catch (error) {
@@ -43,6 +54,8 @@ const TaskItem = ({ task, onTaskChange, isShared }) => {
         setTimeout(() => {
           setError('');
         }, 3000);
+      } finally {
+        setIsLoading(false);
       }
     }
   };
@@ -50,6 +63,7 @@ const TaskItem = ({ task, onTaskChange, isShared }) => {
   const handleDeleteShared = async () => {
     if (window.confirm('¿Estás seguro de que quieres eliminar esta tarea compartida?')) {
       try {
+        setIsLoading(true);
         await deleteSharedTask(task.sharedTaskId || task.id);
         onTaskChange();
       } catch (error) {
@@ -58,6 +72,8 @@ const TaskItem = ({ task, onTaskChange, isShared }) => {
         setTimeout(() => {
           setError('');
         }, 3000);
+      } finally {
+        setIsLoading(false);
       }
     }
   };
@@ -66,9 +82,11 @@ const TaskItem = ({ task, onTaskChange, isShared }) => {
     e.preventDefault();
     setShareError('');
     setShareSuccess('');
+    setIsLoading(true);
 
     if (!shareEmail) {
       setShareError('Por favor, ingresa un email válido');
+      setIsLoading(false);
       return;
     }
 
@@ -92,28 +110,30 @@ const TaskItem = ({ task, onTaskChange, isShared }) => {
         setSharing(false);
         setShareError('');
       }, 3000);
+    } finally {
+      setIsLoading(false);
     }
   };
 
-  const handleEditSubmit = async (e) => {
-    e.preventDefault();
+  const handleSave = async () => {
     try {
+      setIsLoading(true);
       await updateTask(task.id, {
+        ...task,
         title: editedTitle,
         description: editedDescription,
-        status: editedStatus,
-        dueDate: task.dueDate,
-        priority: task.priority
+        status: editedStatus
       });
       setEditing(false);
       onTaskChange();
-      setError('');
-    } catch (err) {
-      console.error("Error al actualizar:", err);
-      setError('Error al actualizar la tarea. Por favor, intenta de nuevo.');
+    } catch (error) {
+      console.error('Error al actualizar la tarea:', error);
+      setError('Error al actualizar la tarea. Inténtalo de nuevo.');
       setTimeout(() => {
         setError('');
       }, 3000);
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -130,8 +150,46 @@ const TaskItem = ({ task, onTaskChange, isShared }) => {
     }
   };
 
+  if (editing) {
+    return (
+      <div className="task-item editing">
+        <input
+          type="text"
+          value={editedTitle}
+          onChange={(e) => setEditedTitle(e.target.value)}
+          className="form-input"
+          placeholder="Título de la tarea"
+        />
+        <textarea
+          value={editedDescription}
+          onChange={(e) => setEditedDescription(e.target.value)}
+          className="form-textarea"
+          placeholder="Descripción de la tarea"
+        />
+        <select
+          value={editedStatus}
+          onChange={(e) => setEditedStatus(e.target.value)}
+          className="form-select"
+        >
+          <option value="pending">Pendiente</option>
+          <option value="in_progress">En progreso</option>
+          <option value="completed">Completada</option>
+        </select>
+        {error && <p className="error-message">{error}</p>}
+        <div className="form-actions">
+          <button onClick={handleSave} className="btn-save" disabled={isLoading}>
+            {isLoading ? 'Guardando...' : 'Guardar'}
+          </button>
+          <button onClick={() => setEditing(false)} className="btn-cancel" disabled={isLoading}>
+            Cancelar
+          </button>
+        </div>
+      </div>
+    );
+  }
+
   return (
-    <div className={`task-item ${task.isShared ? 'shared' : ''}`}>
+    <div className={`task-item ${task.isShared ? 'shared' : ''} ${isLoading ? 'loading' : ''}`}>
       <div className="task-header">
         <h3 className="task-title">
           {task.title}
@@ -144,6 +202,7 @@ const TaskItem = ({ task, onTaskChange, isShared }) => {
                 onClick={() => setSharing(true)}
                 className="btn-share"
                 title="Compartir tarea"
+                disabled={isLoading}
               >
                 Compartir
               </button>
@@ -151,6 +210,7 @@ const TaskItem = ({ task, onTaskChange, isShared }) => {
                 onClick={() => setEditing(true)}
                 className="btn-edit"
                 title="Editar tarea"
+                disabled={isLoading}
               >
                 Editar
               </button>
@@ -158,6 +218,7 @@ const TaskItem = ({ task, onTaskChange, isShared }) => {
                 onClick={handleDelete}
                 className="btn-delete"
                 title="Eliminar tarea"
+                disabled={isLoading}
               >
                 Eliminar
               </button>
@@ -168,6 +229,7 @@ const TaskItem = ({ task, onTaskChange, isShared }) => {
               onClick={handleDeleteShared}
               className="btn-delete"
               title="Eliminar tarea compartida"
+              disabled={isLoading}
             >
               Eliminar
             </button>
@@ -196,79 +258,29 @@ const TaskItem = ({ task, onTaskChange, isShared }) => {
 
         <div className="task-detail">
           <span className="detail-label">Estado:</span>
-          <span className={`status-badge status-${task.status || 'pending'}`}> 
-            {task.status === 'pending' ? 'Pendiente' :
-             task.status === 'in_progress' ? 'En Progreso' :
-             task.status === 'completed' ? 'Completada' : 'Pendiente'}
-          </span>
+          <select
+            value={task.status}
+            onChange={handleStatusChange}
+            className="status-select"
+            disabled={isLoading}
+          >
+            <option value="pending">Pendiente</option>
+            <option value="in_progress">En progreso</option>
+            <option value="completed">Completada</option>
+          </select>
         </div>
 
-        {task.sharedWith && (
-          <div className="task-detail shared-with">
+        {task.isShared && (
+          <div className="task-detail">
             <span className="detail-label">Compartida con:</span>
-            <span className="detail-value shared-user">
-              <span className="shared-icon">👤</span>
-              {task.sharedWith.username || task.sharedWith.email}
+            <span className="detail-value">
+              {task.sharedWith?.email || 'Usuario desconocido'}
             </span>
           </div>
         )}
       </div>
 
       {error && <p className="error-message">{error}</p>}
-
-      {editing && (
-        <form onSubmit={handleEditSubmit} className="task-form-edit">
-          <h4>✏️ Editar Tarea</h4>
-          
-          <div className="form-group">
-            <label htmlFor="edit-title">Título</label>
-            <input
-              id="edit-title"
-              type="text"
-              value={editedTitle}
-              onChange={e => setEditedTitle(e.target.value)}
-              placeholder="Ingresa el título de la tarea"
-              required
-              className="form-input"
-            />
-          </div>
-
-          <div className="form-group">
-            <label htmlFor="edit-description">Descripción</label>
-            <textarea
-              id="edit-description"
-              value={editedDescription}
-              onChange={e => setEditedDescription(e.target.value)}
-              placeholder="Describe los detalles de la tarea"
-              className="form-textarea"
-            />
-          </div>
-
-          <div className="form-group">
-            <label htmlFor="edit-status">Estado</label>
-            <select
-              id="edit-status"
-              value={editedStatus}
-              onChange={e => setEditedStatus(e.target.value)}
-              className="form-select"
-              style={{ borderColor: getStatusColor(editedStatus) }}
-            >
-              <option value="pending">Pendiente</option>
-              <option value="in_progress">En Progreso</option>
-              <option value="completed">Completada</option>
-            </select>
-          </div>
-
-          <div className="form-actions">
-            <button type="button" onClick={() => setEditing(false)} className="btn-cancel">
-              <span>✕</span> Cancelar
-            </button>
-            <button type="submit" className="btn-save">
-              <span>💾</span> Guardar Cambios
-            </button>
-          </div>
-        </form>
-      )}
 
       {sharing && (
         <form onSubmit={handleShare} className="share-form">
@@ -279,12 +291,17 @@ const TaskItem = ({ task, onTaskChange, isShared }) => {
             placeholder="Email del usuario"
             required
             className="form-input"
+            disabled={isLoading}
           />
           {shareError && <p className="error-message">{shareError}</p>}
           {shareSuccess && <p className="success-message">{shareSuccess}</p>}
           <div className="form-actions">
-            <button type="submit" className="btn-share">Compartir</button>
-            <button type="button" onClick={() => setSharing(false)} className="btn-cancel">Cancelar</button>
+            <button type="submit" className="btn-share" disabled={isLoading}>
+              {isLoading ? 'Compartiendo...' : 'Compartir'}
+            </button>
+            <button type="button" onClick={() => setSharing(false)} className="btn-cancel" disabled={isLoading}>
+              Cancelar
+            </button>
           </div>
         </form>
       )}

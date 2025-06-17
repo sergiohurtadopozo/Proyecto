@@ -1,5 +1,6 @@
-import React, { createContext, useContext, useState, useCallback } from 'react';
+import React, { createContext, useContext, useState, useCallback, useEffect } from 'react';
 import { taskService } from '../services/taskService';
+import { useAuth } from './AuthContext';
 
 const TaskContext = createContext();
 
@@ -15,46 +16,45 @@ export const TaskProvider = ({ children }) => {
   const [tasks, setTasks] = useState([]);
   const [sharedTasks, setSharedTasks] = useState([]);
   const [pendingRequests, setPendingRequests] = useState([]);
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const { user } = useAuth();
 
-  const fetchTasks = useCallback(async () => {
+  const fetchTasks = async () => {
     try {
       setLoading(true);
       setError(null);
-      const [ownTasks, shared, pending] = await Promise.all([
+      const [userTasks, sharedTasksData, pendingRequestsData] = await Promise.all([
         taskService.getTasks(),
         taskService.getSharedTasks(),
         taskService.getPendingRequests()
       ]);
-      setTasks(ownTasks);
-      setSharedTasks(shared);
-      setPendingRequests(pending);
+      
+      setTasks(userTasks);
+      setSharedTasks(sharedTasksData);
+      setPendingRequests(pendingRequestsData);
     } catch (err) {
       setError(err.message || 'Error al cargar las tareas');
     } finally {
       setLoading(false);
     }
-  }, []);
+  };
+
+  useEffect(() => {
+    if (user) {
+      fetchTasks();
+    }
+  }, [user]);
 
   const addTask = async (taskData) => {
-    const tempId = Date.now();
+    const originalTasks = [...tasks];
     try {
       setError(null);
-      const tempTask = {
-        ...taskData,
-        id: tempId,
-        isLoading: true
-      };
-      setTasks(prev => [...prev, tempTask]);
-
       const newTask = await taskService.createTask(taskData);
-      setTasks(prev => prev.map(task => 
-        task.id === tempId ? { ...newTask, isLoading: false } : task
-      ));
+      setTasks(prev => [...prev, newTask]);
       return newTask;
     } catch (err) {
-      setTasks(prev => prev.filter(task => task.id !== tempId));
+      setTasks(originalTasks);
       setError(err.message || 'Error al crear la tarea');
       throw err;
     }
@@ -85,7 +85,6 @@ export const TaskProvider = ({ children }) => {
     try {
       setError(null);
       setTasks(prev => prev.filter(task => task.id !== id));
-
       await taskService.deleteTask(id);
     } catch (err) {
       setTasks(originalTasks);
@@ -98,8 +97,14 @@ export const TaskProvider = ({ children }) => {
     try {
       setError(null);
       await taskService.shareTask(taskId, email);
+      // Actualizar inmediatamente las solicitudes pendientes
       const pending = await taskService.getPendingRequests();
       setPendingRequests(pending);
+      // Actualizar la tarea compartida en la lista de tareas
+      const updatedTask = await taskService.getTaskById(taskId);
+      setTasks(prev => prev.map(task => 
+        task.id === taskId ? { ...task, ...updatedTask } : task
+      ));
     } catch (err) {
       setError(err.message || 'Error al compartir la tarea');
       throw err;
@@ -110,9 +115,19 @@ export const TaskProvider = ({ children }) => {
     try {
       setError(null);
       await taskService.respondToShareRequest(shareId, accept);
+      // Actualizar inmediatamente las solicitudes pendientes
       const pending = await taskService.getPendingRequests();
       setPendingRequests(pending);
-      await fetchTasks();
+      
+      // Si se aceptó la solicitud, actualizar las tareas compartidas
+      if (accept) {
+        const [userTasks, sharedTasksData] = await Promise.all([
+          taskService.getTasks(),
+          taskService.getSharedTasks()
+        ]);
+        setTasks(userTasks);
+        setSharedTasks(sharedTasksData);
+      }
     } catch (err) {
       setError(err.message || 'Error al responder a la solicitud');
       throw err;
@@ -123,7 +138,13 @@ export const TaskProvider = ({ children }) => {
     try {
       setError(null);
       await taskService.deleteSharedTask(sharedTaskId);
-      await fetchTasks();
+      // Actualizar inmediatamente las tareas compartidas
+      const [userTasks, sharedTasksData] = await Promise.all([
+        taskService.getTasks(),
+        taskService.getSharedTasks()
+      ]);
+      setTasks(userTasks);
+      setSharedTasks(sharedTasksData);
     } catch (err) {
       setError(err.message || 'Error al eliminar la tarea compartida');
       throw err;
