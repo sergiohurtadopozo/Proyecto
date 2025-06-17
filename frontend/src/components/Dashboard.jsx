@@ -34,8 +34,15 @@ function Dashboard() {
         await fetchTasks();
       } catch (error) {
         console.error('Error al obtener perfil:', error);
-        if (error.message === 'No hay token de autenticación') {
+        if (
+          error.message === 'No hay token de autenticación' ||
+          error.message === 'Sesión expirada' ||
+          (error.response && (error.response.status === 401 || error.response.status === 403))
+        ) {
+          localStorage.removeItem('token');
           navigate('/login');
+        } else if (error.message.includes('Network Error') || error.message.includes('Failed to fetch')) {
+          setError('No se pudo conectar con el servidor. Intenta más tarde.');
         } else {
           setError('No se pudo cargar el perfil. Por favor, intenta nuevamente.');
         }
