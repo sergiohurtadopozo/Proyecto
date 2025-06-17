@@ -49,7 +49,7 @@ export const register = (userData) => {
 
 // Perfil
 export const getProfile = () => {
-  return api.get('/profile');
+  return api.get('/auth/me');
 };
 
 // Tareas
