@@ -20,6 +20,7 @@ function Dashboard() {
   const navigate = useNavigate();
   const [showNotification, setShowNotification] = useState(false);
   const [tasksDueTomorrow, setTasksDueTomorrow] = useState([]);
+  const [tasksDueToday, setTasksDueToday] = useState([]);
 
   useEffect(() => {
     const fetchProfile = async () => {
@@ -56,16 +57,24 @@ function Dashboard() {
   }, [navigate, fetchTasks]);
 
   useEffect(() => {
-    const tomorrow = new Date();
-    tomorrow.setDate(tomorrow.getDate() + 1);
-    tomorrow.setHours(0, 0, 0, 0);
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    const tomorrow = new Date(today);
+    tomorrow.setDate(today.getDate() + 1);
+    
+    const dueToday = tasks.filter(task => {
+      const dueDate = new Date(task.dueDate);
+      dueDate.setHours(0, 0, 0, 0);
+      return dueDate.getTime() === today.getTime();
+    });
     const dueTomorrow = tasks.filter(task => {
       const dueDate = new Date(task.dueDate);
       dueDate.setHours(0, 0, 0, 0);
       return dueDate.getTime() === tomorrow.getTime();
     });
     setTasksDueTomorrow(dueTomorrow);
-    setShowNotification(dueTomorrow.length > 0);
+    setShowNotification(dueTomorrow.length > 0 || dueToday.length > 0);
+    setTasksDueToday && setTasksDueToday(dueToday);
   }, [tasks]);
 
   const handleTaskAdded = () => {
@@ -86,11 +95,24 @@ function Dashboard() {
     return <ErrorFallback message={error} />;
   }
 
+  const dueToday = tasks.filter(task => {
+    const dueDate = new Date(task.dueDate);
+    dueDate.setHours(0, 0, 0, 0);
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    return dueDate.getTime() === today.getTime();
+  });
+
   return (
     <div className="dashboard-container">
       {showNotification && (
         <div className="notification-banner">
-          <strong>¡Atención!</strong> Tienes {tasksDueTomorrow.length} tarea(s) que vencen mañana.
+          {dueToday.length > 0 && (
+            <div><strong>¡Atención!</strong> Tienes {dueToday.length} tarea(s) que vencen <strong>hoy</strong>.</div>
+          )}
+          {tasksDueTomorrow.length > 0 && (
+            <div><strong>¡Atención!</strong> Tienes {tasksDueTomorrow.length} tarea(s) que vencen <strong>mañana</strong>.</div>
+          )}
         </div>
       )}
       <div className="dashboard-header">

@@ -279,6 +279,15 @@ const TaskItem = ({ task, onTaskChange, isShared }) => {
             </span>
           </div>
         )}
+
+        {task.isShared && (
+          <div className="task-detail">
+            <span className="detail-label">Compartida por:</span>
+            <span className="detail-value">
+              {task.ownerName ? `${task.ownerName} (${task.ownerEmail})` : (task.ownerEmail || 'Desconocido')}
+            </span>
+          </div>
+        )}
       </div>
 
       {error && <p className="error-message">{error}</p>}
