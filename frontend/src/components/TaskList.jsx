@@ -16,10 +16,12 @@ const TaskList = ({ showSharedTasks, onTaskChange }) => {
   }
 
   // Combinar tareas normales y compartidas
-  const allTasks = [...tasks];
+  const allTasks = Array.isArray(tasks) ? tasks : [];
+  const allSharedTasks = Array.isArray(sharedTasks) ? sharedTasks : [];
+  const combinedTasks = showSharedTasks ? allSharedTasks : allTasks;
   
   // Agregar información de compartido a las tareas que han sido compartidas
-  sharedTasks.forEach(sharedTask => {
+  allSharedTasks.forEach(sharedTask => {
     const taskIndex = allTasks.findIndex(task => task.id === sharedTask.Task.id);
     if (taskIndex !== -1) {
       allTasks[taskIndex] = {
@@ -32,12 +34,16 @@ const TaskList = ({ showSharedTasks, onTaskChange }) => {
 
   // Si estamos en modo "ver tareas compartidas", mostrar solo las tareas compartidas con el usuario
   const currentTasks = showSharedTasks 
-    ? sharedTasks.map(st => ({
+    ? allSharedTasks.map(st => ({
         ...st.Task,
         sharedTaskId: st.id,
         sharedWith: st.Task.User
       }))
     : allTasks;
+
+  if (!loading && (!combinedTasks || combinedTasks.length === 0)) {
+    return <div className="no-tasks-message">No hay tareas para mostrar.</div>;
+  }
 
   return (
     <div className="task-list">

@@ -33,9 +33,9 @@ function CalendarView({ tasks: propTasks }) {
 
   // Si se pasan tasks por props (modo admin), solo mostrar esas tareas
   // Si no, permitir alternar entre tareas propias y compartidas
-  const calendarTasks = propTasks
+  const calendarTasks = Array.isArray(propTasks)
     ? propTasks
-    : (showSharedTasks ? sharedTasks.map(st => st.Task) : tasks);
+    : (showSharedTasks ? (Array.isArray(sharedTasks) ? sharedTasks.map(st => st.Task) : []) : (Array.isArray(tasks) ? tasks : []));
 
   const getDaysInMonth = (date) => {
     return new Date(date.getFullYear(), date.getMonth() + 1, 0).getDate();
@@ -164,6 +164,14 @@ function CalendarView({ tasks: propTasks }) {
       );
     });
   };
+
+  if (!loading && !error && (!calendarTasks || calendarTasks.length === 0)) {
+    return (
+      <div className="calendar-container">
+        <p className="no-tasks-message">No hay tareas para mostrar en el calendario.</p>
+      </div>
+    );
+  }
 
   if (loading) {
     return (

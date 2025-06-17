@@ -25,16 +25,18 @@ export const TaskProvider = ({ children }) => {
       setLoading(true);
       setError(null);
       const [userTasks, sharedTasksData, pendingRequestsData] = await Promise.all([
-        taskService.getTasks(),
-        taskService.getSharedTasks(),
-        taskService.getPendingRequests()
+        taskService.getTasks().catch(() => []),
+        taskService.getSharedTasks().catch(() => []),
+        taskService.getPendingRequests().catch(() => [])
       ]);
-      
-      setTasks(userTasks);
-      setSharedTasks(sharedTasksData);
-      setPendingRequests(pendingRequestsData);
+      setTasks(Array.isArray(userTasks) ? userTasks : []);
+      setSharedTasks(Array.isArray(sharedTasksData) ? sharedTasksData : []);
+      setPendingRequests(Array.isArray(pendingRequestsData) ? pendingRequestsData : []);
     } catch (err) {
       setError(err.message || 'Error al cargar las tareas');
+      setTasks([]);
+      setSharedTasks([]);
+      setPendingRequests([]);
     } finally {
       setLoading(false);
     }
