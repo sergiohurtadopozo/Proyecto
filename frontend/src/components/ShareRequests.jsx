@@ -1,36 +1,18 @@
-import React, { useState, useEffect } from 'react';
-import { taskService } from '../services/taskService';
+import React from 'react';
+import { useTasks } from '../context/TaskContext';
 import '../estilos/ShareRequests.css';
 
 const ShareRequests = ({ onRequestResponded }) => {
-  const [requests, setRequests] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState('');
-
-  useEffect(() => {
-    fetchRequests();
-  }, []);
-
-  const fetchRequests = async () => {
-    try {
-      const data = await taskService.getPendingRequests();
-      setRequests(data);
-      setLoading(false);
-    } catch (error) {
-      setError('Error al cargar las solicitudes');
-      setLoading(false);
-    }
-  };
+  const { pendingRequests, loading, error, respondToShareRequest } = useTasks();
 
   const handleResponse = async (shareId, accept) => {
     try {
-      await taskService.respondToShareRequest(shareId, accept);
-      fetchRequests();
+      await respondToShareRequest(shareId, accept);
       if (onRequestResponded) {
         onRequestResponded();
       }
     } catch (error) {
-      setError('Error al responder a la solicitud');
+      console.error('Error al responder a la solicitud:', error);
     }
   };
 
@@ -59,7 +41,7 @@ const ShareRequests = ({ onRequestResponded }) => {
     );
   }
 
-  if (requests.length === 0) {
+  if (pendingRequests.length === 0) {
     return (
       <div className="text-center p-4 text-gray-500">
         No hay solicitudes pendientes
@@ -69,7 +51,7 @@ const ShareRequests = ({ onRequestResponded }) => {
 
   return (
     <div className="space-y-4">
-      {requests.map((request) => (
+      {pendingRequests.map((request) => (
         <div key={request.id} className="bg-white shadow rounded-lg p-4">
           <div className="flex justify-between items-start">
             <div>

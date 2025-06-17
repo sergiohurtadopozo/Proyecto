@@ -25,7 +25,10 @@ const TaskItem = ({ task, onTaskChange, isShared }) => {
       onTaskChange();
     } catch (error) {
       console.error('Error al actualizar el estado:', error);
-      setError('Error al actualizar el estado');
+      setError('Error al actualizar el estado. Inténtalo de nuevo.');
+      setTimeout(() => {
+        setError('');
+      }, 3000);
     }
   };
 
@@ -36,7 +39,10 @@ const TaskItem = ({ task, onTaskChange, isShared }) => {
         onTaskChange();
       } catch (error) {
         console.error('Error al eliminar la tarea:', error);
-        setError('Error al eliminar la tarea');
+        setError('Error al eliminar la tarea. Inténtalo de nuevo.');
+        setTimeout(() => {
+          setError('');
+        }, 3000);
       }
     }
   };
@@ -47,7 +53,11 @@ const TaskItem = ({ task, onTaskChange, isShared }) => {
         await deleteSharedTask(task.sharedTaskId || task.id);
         onTaskChange();
       } catch (error) {
-        setError('Error al eliminar la tarea compartida');
+        console.error('Error al eliminar la tarea compartida:', error);
+        setError('Error al eliminar la tarea compartida. Inténtalo de nuevo.');
+        setTimeout(() => {
+          setError('');
+        }, 3000);
       }
     }
   };
@@ -69,7 +79,19 @@ const TaskItem = ({ task, onTaskChange, isShared }) => {
       setSharing(false);
       onTaskChange();
     } catch (error) {
-      setShareError(error.message || 'Error al compartir la tarea');
+      if (error.message.includes('no encontrado')) {
+        setShareError('El usuario no existe en el sistema');
+      } else if (error.message.includes('ya compartida')) {
+        setShareError('Esta tarea ya ha sido compartida con este usuario');
+      } else if (error.message.includes('Sesión expirada')) {
+        setShareError('Tu sesión ha expirado. Por favor, vuelve a iniciar sesión');
+      } else {
+        setShareError(error.message || 'Error al compartir la tarea');
+      }
+      setTimeout(() => {
+        setSharing(false);
+        setShareError('');
+      }, 3000);
     }
   };
 
@@ -89,6 +111,9 @@ const TaskItem = ({ task, onTaskChange, isShared }) => {
     } catch (err) {
       console.error("Error al actualizar:", err);
       setError('Error al actualizar la tarea. Por favor, intenta de nuevo.');
+      setTimeout(() => {
+        setError('');
+      }, 3000);
     }
   };
 
@@ -176,10 +201,11 @@ const TaskItem = ({ task, onTaskChange, isShared }) => {
         </div>
 
         {task.sharedWith && (
-          <div className="task-detail">
+          <div className="task-detail shared-with">
             <span className="detail-label">Compartida con:</span>
-            <span className="detail-value">
-              {task.sharedWith.email}
+            <span className="detail-value shared-user">
+              <span className="shared-icon">👤</span>
+              {task.sharedWith.username || task.sharedWith.email}
             </span>
           </div>
         )}

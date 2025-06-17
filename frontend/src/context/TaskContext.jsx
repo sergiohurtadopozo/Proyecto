@@ -14,6 +14,7 @@ export const useTasks = () => {
 export const TaskProvider = ({ children }) => {
   const [tasks, setTasks] = useState([]);
   const [sharedTasks, setSharedTasks] = useState([]);
+  const [pendingRequests, setPendingRequests] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
@@ -21,12 +22,14 @@ export const TaskProvider = ({ children }) => {
     try {
       setLoading(true);
       setError(null);
-      const [ownTasks, shared] = await Promise.all([
+      const [ownTasks, shared, pending] = await Promise.all([
         taskService.getTasks(),
-        taskService.getSharedTasks()
+        taskService.getSharedTasks(),
+        taskService.getPendingRequests()
       ]);
       setTasks(ownTasks);
       setSharedTasks(shared);
+      setPendingRequests(pending);
     } catch (err) {
       setError(err.message || 'Error al cargar las tareas');
     } finally {
@@ -95,7 +98,8 @@ export const TaskProvider = ({ children }) => {
     try {
       setError(null);
       await taskService.shareTask(taskId, email);
-      await fetchTasks();
+      const pending = await taskService.getPendingRequests();
+      setPendingRequests(pending);
     } catch (err) {
       setError(err.message || 'Error al compartir la tarea');
       throw err;
@@ -106,6 +110,8 @@ export const TaskProvider = ({ children }) => {
     try {
       setError(null);
       await taskService.respondToShareRequest(shareId, accept);
+      const pending = await taskService.getPendingRequests();
+      setPendingRequests(pending);
       await fetchTasks();
     } catch (err) {
       setError(err.message || 'Error al responder a la solicitud');
@@ -127,6 +133,7 @@ export const TaskProvider = ({ children }) => {
   const value = {
     tasks,
     sharedTasks,
+    pendingRequests,
     loading,
     error,
     fetchTasks,
