@@ -11,6 +11,7 @@ const TaskItem = ({ task, onTaskChange, isShared }) => {
   const [editedTitle, setEditedTitle] = useState(task.title);
   const [editedDescription, setEditedDescription] = useState(task.description);
   const [editedStatus, setEditedStatus] = useState(task.status);
+  const [editedPriority, setEditedPriority] = useState(task.priority);
   const [error, setError] = useState('');
   const [sharing, setSharing] = useState(false);
   const [shareEmail, setShareEmail] = useState('');
@@ -25,6 +26,7 @@ const TaskItem = ({ task, onTaskChange, isShared }) => {
     setEditedTitle(task.title);
     setEditedDescription(task.description);
     setEditedStatus(task.status);
+    setEditedPriority(task.priority);
   }, [task]);
 
   const handleStatusChange = async (e) => {
@@ -128,7 +130,8 @@ const TaskItem = ({ task, onTaskChange, isShared }) => {
         ...task,
         title: editedTitle,
         description: editedDescription,
-        status: editedStatus
+        status: editedStatus,
+        priority: editedPriority
       });
       setEditing(false);
       onTaskChange();
@@ -172,6 +175,15 @@ const TaskItem = ({ task, onTaskChange, isShared }) => {
           className="form-textarea"
           placeholder="Descripción de la tarea"
         />
+        <select
+          value={editedPriority}
+          onChange={(e) => setEditedPriority(e.target.value)}
+          className="form-select"
+        >
+          <option value="low">Baja</option>
+          <option value="medium">Media</option>
+          <option value="high">Alta</option>
+        </select>
         <select
           value={editedStatus}
           onChange={(e) => setEditedStatus(e.target.value)}
