@@ -68,12 +68,13 @@ router.get('/shared', authenticate, async (req, res) => {
 // Crear una nueva tarea
 router.post('/', authenticate, async (req, res) => {
   try {
-    const { title, description, dueDate, priority } = req.body;
+    const { title, description, dueDate, priority, status } = req.body;
     const task = await Task.create({
       title,
       description,
       dueDate,
       priority,
+      status,
       userId: req.user.id
     });
     res.status(201).json(task);
