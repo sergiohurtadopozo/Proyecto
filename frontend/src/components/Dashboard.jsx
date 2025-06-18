@@ -16,7 +16,7 @@ function Dashboard() {
   const [error, setError] = useState(null);
   const [showTaskForm, setShowTaskForm] = useState(false);
   const [showSharedTasks, setShowSharedTasks] = useState(false);
-  const { fetchTasks, tasks } = useTasks();
+  const { fetchTasks, tasks, sharedTasks } = useTasks();
   const navigate = useNavigate();
   const [showNotification, setShowNotification] = useState(false);
   const [tasksDueTomorrow, setTasksDueTomorrow] = useState([]);
@@ -103,6 +103,17 @@ function Dashboard() {
     return dueDate.getTime() === today.getTime();
   });
 
+  // Determinar las tareas a mostrar en el calendario
+  let calendarTasks = [];
+  if (showSharedTasks) {
+    // Tareas compartidas (mapeadas al formato de Task)
+    calendarTasks = Array.isArray(sharedTasks)
+      ? sharedTasks.map(st => st.Task ? { ...st.Task, sharedTaskId: st.id } : st)
+      : [];
+  } else {
+    calendarTasks = Array.isArray(tasks) ? tasks : [];
+  }
+
   return (
     <div className="dashboard-container">
       {showNotification && (
@@ -161,7 +172,7 @@ function Dashboard() {
 
       <div className="calendar-section">
         <h3>Calendario de Tareas</h3>
-        <CalendarView />
+        <CalendarView tasks={calendarTasks} />
       </div>
     </div>
   );
