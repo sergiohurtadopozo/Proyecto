@@ -2,20 +2,85 @@ const { Task, User, SharedTask } = require('../models');
 const { Op } = require('sequelize');
 const moment = require('moment');
 
+const buildTaskPayload = ({
+    title,
+    description,
+    dueDate,
+    priority,
+    status,
+    isRecurring,
+    recurrenceType
+}) => {
+    const payload = {};
+
+    if (title !== undefined) {
+        payload.title = title;
+    }
+    if (description !== undefined) {
+        payload.description = description;
+    }
+    if (dueDate !== undefined) {
+        payload.dueDate = dueDate;
+    }
+    if (priority !== undefined) {
+        payload.priority = priority;
+    }
+    if (status !== undefined) {
+        payload.status = status;
+    }
+    if (isRecurring !== undefined) {
+        payload.isRecurring = isRecurring;
+        if (isRecurring === false) {
+            payload.recurrenceType = null;
+        }
+    }
+    if (recurrenceType !== undefined && isRecurring !== false) {
+        payload.recurrenceType = recurrenceType;
+    }
+
+    return payload;
+};
+
+const parseDueDate = (dueDate) => {
+    if (!dueDate) {
+        return { error: 'La fecha de vencimiento es requerida' };
+    }
+
+    const parsedDate = new Date(dueDate);
+    if (Number.isNaN(parsedDate.getTime())) {
+        return { error: 'La fecha de vencimiento no es válida' };
+    }
+
+    return { value: parsedDate };
+};
+
 // Crear una nueva tarea
 exports.createTask = async (req, res) => {
     try {
         const { title, description, dueDate, priority, isRecurring, recurrenceType } = req.body;
         const userId = req.user.id;
 
-        const task = await Task.create({
-            title,
+        if (typeof title !== 'string' || !title.trim()) {
+            return res.status(400).json({ message: 'El título es requerido' });
+        }
+
+        const { value: parsedDueDate, error } = parseDueDate(dueDate);
+        if (error) {
+            return res.status(400).json({ message: error });
+        }
+
+        const taskPayload = buildTaskPayload({
+            title: typeof title === 'string' ? title.trim() : title,
             description,
-            dueDate,
+            dueDate: parsedDueDate,
             priority,
-            userId,
             isRecurring,
             recurrenceType
+        });
+
+        const task = await Task.create({
+            ...taskPayload,
+            userId
         });
 
         res.status(201).json(task);
@@ -69,15 +134,30 @@ exports.updateTask = async (req, res) => {
             return res.status(404).json({ message: 'Tarea no encontrada' });
         }
 
-        await task.update({
-            title,
+        let parsedDueDate;
+        if (dueDate !== undefined) {
+            const { value, error } = parseDueDate(dueDate);
+            if (error) {
+                return res.status(400).json({ message: error });
+            }
+            parsedDueDate = value;
+        }
+
+        const taskPayload = buildTaskPayload({
+            title: typeof title === 'string' ? title.trim() : title,
             description,
-            dueDate,
+            dueDate: parsedDueDate,
             priority,
             status,
             isRecurring,
             recurrenceType
         });
+
+        if (!Object.keys(taskPayload).length) {
+            return res.status(400).json({ message: 'No hay cambios para actualizar' });
+        }
+
+        await task.update(taskPayload);
 
         res.json(task);
     } catch (error) {
