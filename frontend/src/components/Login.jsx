@@ -32,9 +32,10 @@ function Login({ onAuthSuccess }) {
 
   const handleChange = (e) => {
     const { name, value } = e.target;
+    const normalizedValue = name === 'password' ? value : value.trim();
     setFormData(prev => ({
       ...prev,
-      [name]: value.trim()
+      [name]: normalizedValue
     }));
     // Limpiar el error del campo cuando el usuario comienza a escribir
     if (errors[name]) {
